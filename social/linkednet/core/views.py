@@ -1,11 +1,11 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .models import Profile, Post, LikePost, FollowersCount
+from .models import Profile, Post, LikePost, FollowersCount, Company
 from itertools import chain
 import random
 from PIL import Image
@@ -44,6 +44,7 @@ def index(request):
     current_user = User.objects.filter(username=request.user.username)
     final_suggestions_list = [x for x in list(new_suggestions_list) if (x not in list(current_user))]
     random.shuffle(final_suggestions_list)
+
 
     username_profile = []
     username_profile_list = []
@@ -196,11 +197,19 @@ def settings(request):
             bio = request.POST['bio']
             location = request.POST['location']
             phone = request.POST['phone']
+            tenth = request.POST['tenth']
+            twelfth = request.POST['twelfth']
+            ug = request.POST['ug']
+            pg = request.POST['pg']
 
             user_profile.profileimg = image
             user_profile.bio = bio
             user_profile.location = location
             user_profile.phone = phone
+            user_profile.tenth = tenth
+            user_profile.twelfth = twelfth
+            user_profile.ug = ug
+            user_profile.pg = pg
             user_profile.save()
         if request.FILES.get('image') != None:
 
@@ -213,6 +222,10 @@ def settings(request):
             user_profile.bio = bio
             user_profile.location = location
             user_profile.phone = phone
+            user_profile.tenth = tenth
+            user_profile.twelfth = twelfth
+            user_profile.ug = ug
+            user_profile.pg = pg
             user_profile.save()
 
         return redirect('/')
@@ -280,13 +293,41 @@ def logout(request):
     return redirect('signin')
 
 
+def csignup(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        cname = request.POST['cname']
+        location = request.POST['location']
+        website = request.POST['website']
+        email = request.POST['email']
+        password = request.POST['password']
+        password2 = request.POST['password2']
 
+        if password == password2:
+            if Company.objects.filter(email=email).exists():
+                messages.info(request, 'Email Taken')
+                return redirect('csignup')
+            elif Company.objects.filter(username=username).exists():
+                messages.info(request, 'Username Taken')
+                return redirect('csignup')
+            else:
+                company = Company(username=username, cname=cname, location=location, website=website, email=email, password=password)
+                company.save()
+                return redirect('signin')
+        else:
+            messages.info(request, 'Password Not Matching')
+            return redirect('csignup')
 
-def check_username(request):
-    username=request.POST.get('username')
-
-    if get_user_model().objects.filter(username=username).exists():
-        return HttpResponse('<div style="color:red">This username already exist</div>')
     else:
-        return HttpResponse('<div style="color:red">This username is available</div>')
+        return render(request, 'csignup.html')
 
+# def login_page(request):
+#     post_data = request.POST
+#     user = authenticate(username=post_data['email'], password=post_data['password'])
+#     if user is None:
+#         L.warning('Authentication error wrong credentials')
+#         return HttpResponseRedirect('/')
+#     else:
+#         auth_login(request, user)
+#         L.INFO('Authentication ok')
+#         return HttpResponseRedirect('/')

@@ -15,6 +15,10 @@ class Profile(models.Model):
     phone = models.CharField(max_length=10)
     profileimg = models.ImageField(upload_to='profile_images', default='pic.png')
     location = models.CharField(max_length=100, blank=True)
+    tenth = models.IntegerField(blank=True, default=0)
+    twelfth = models.IntegerField(blank=True, default=0)
+    ug = models.IntegerField(blank=True, default=0)
+    pg = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
         return self.user.username
@@ -44,3 +48,15 @@ class FollowersCount(models.Model):
 
     def __str__(self):
         return self.user
+
+class Company(models.Model):
+    cid = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    username = models.CharField(max_length=50, default=0)
+    cname = models.CharField(max_length=100)
+    location = models.CharField(max_length=100, blank=True)
+    email = models.CharField(max_length=100)
+    password = models.CharField(max_length=30)
+    website = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.cname

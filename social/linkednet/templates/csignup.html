@@ -10,7 +10,7 @@
       rel="icon"
       type="image/png"
     />
-    <title>Sign Up - LinkedNet</title>
+    <title>Company SignUp - LinkedNet</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}" />
@@ -226,9 +226,9 @@
             <span id="msg10" style="color: red"></span>
             <input
               type="text"
-              name="first_name"
-              id="first_name"
-              placeholder="First name"
+              name="cname"
+              id="cname"
+              placeholder="Company name"
               onkeyup="return Validstr1();"
               class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800"
               style="border: 1px solid #d3d5d8 !important"
@@ -237,9 +237,9 @@
             <span id="msg" style="color: red"></span>
             <input
               type="text"
-              name="last_name"
-              id="last_name"
-              placeholder="Last name"
+              name="location"
+              id="location"
+              placeholder="Location"
               onkeyup="return Validstr2();"
               class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800"
               style="border: 1px solid #d3d5d8 !important"
@@ -257,6 +257,16 @@
               required
             />
             <span id="email1" style="color: red"></span>
+            <input
+              type="text"
+              name="website"
+              id="website"
+              placeholder="Website"
+              class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800"
+              style="border: 1px solid #d3d5d8 !important"
+              required
+            />
+<!--            <span id="email1" style="color: red"></span>-->
             <input
               type="password"
               name="password"
@@ -313,7 +323,7 @@
             <a href="#"> Terms</a>
             <a href="#"> Privacy</a>
           </div>
-          <p class="capitalize">© copyright 2020 by LinkedNet</p>
+          <p class="capitalize">©Copyright 2020 by LinkedNet</p>
         </div>
       </div>
     </div>

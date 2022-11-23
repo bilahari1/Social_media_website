@@ -29,6 +29,67 @@
                             document.getElementById('msg2').style.display = "none";
                         }
                     }
+    function Validten()
+    {
+        var ten = document.getElementById("tenth").value;
+        var expr = /\b([0-9]|10)\b/;
+        if(expr.test(ten)==false){
+            document.getElementById('mt').style.display = "block";
+            document.getElementById('mt').innerHTML = "Enter a valid CGPA";
+            return false;
+        }
+        else{
+            document.getElementById('mt').style.display = "none";
+        }
+    }
+
+    function Validtw()
+    {
+        var ten = document.getElementById("twelfth").value;
+        var expr = /\b([0-9]|10)\b/;
+        if(expr.test(ten)==false){
+            document.getElementById('mtw').style.display = "block";
+            document.getElementById('mtw').innerHTML = "Enter a valid CGPA";
+            return false;
+        }
+        else{
+            document.getElementById('mtw').style.display = "none";
+        }
+    }
+
+    function Validug()
+    {
+        var ten = document.getElementById("ug").value;
+        var expr = /\b([0-9]|10)\b/;
+        if(expr.test(ten)==false){
+            document.getElementById('mug').style.display = "block";
+            document.getElementById('mug').innerHTML = "Enter a valid CGPA";
+            return false;
+        }
+        else{
+            document.getElementById('mug').style.display = "none";
+        }
+    }
+
+    function Validpg()
+    {
+        var ten = document.getElementById("pg").value;
+        var expr = /\b([0-9]|10)\b/;
+        if(expr.test(ten)==false){
+            document.getElementById('mpg').style.display = "block";
+            document.getElementById('mpg').innerHTML = "Enter a valid CGPA";
+            return false;
+        }
+        else{
+            document.getElementById('mpg').style.display = "none";
+        }
+    }
+
+    function Val(){
+        if(Validphone() === false || Validten() === false || Validtw === false || Validug === false || Validpg === false){
+        return false;
+        }
+    }
 </script>
 
 <body>
@@ -59,10 +120,11 @@
                     </div>
                     <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
                         
-                    <form action="" method="POST" enctype="multipart/form-data" onsubmit ="return Validphone()">
+                    <form action="" method="POST" enctype="multipart/form-data" onsubmit ="return Val()">
                         {% csrf_token %}
                        <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
-                           
+
+
                            
                             <div class="col-span-2">
                                 <label for=""> Profile Image</label>
@@ -72,7 +134,7 @@
                             <div class="col-span-2">
                                 <label for="about">Bio</label>  
                                 <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>
-                            </div> 
+                            </div>
                             <div class="col-span-2">
                                 <label for=""> Location</label>
                                 <input type="text" name="location" value="{{user_profile.location}}" class="shadow-none bg-gray-100">
@@ -82,7 +144,26 @@
                                 <input type="text" name="phone" id="phone" value="{{user_profile.phone}}" onkeyup="return Validphone();" class="shadow-none bg-gray-100">
                             </div>
                            <span id="msg2" style="color:red;"></span>
-                            
+                           <div class="col-span-2">
+                                <label for=""> Tenth CGPA</label>
+                                <input type="text" name="tenth" id="tenth" value="{{user_profile.tenth}}" onkeyup="return Validten();" class="shadow-none bg-gray-100">
+                            </div>
+                            <span id="mt" style="color:red;"></span>
+                           <div class="col-span-2">
+                                <label for=""> Twelfth CGPA</label>
+                                <input type="text" name="twelfth" id="twelfth" value="{{user_profile.twelfth}}" onkeyup="return Validtw();" class="shadow-none bg-gray-100">
+                            </div>
+                            <span id="mtw" style="color:red;"></span>
+                           <div class="col-span-2">
+                                <label for=""> UG CGPA</label>
+                                <input type="text" name="ug" id="ug" value="{{user_profile.ug}}" onkeyup="return Validug();" class="shadow-none bg-gray-100">
+                            </div>
+                            <span id="mug" style="color:red;"></span>
+                           <div class="col-span-2">
+                                <label for=""> PG CGPA</label>
+                                <input type="text" name="pg" id="pg" value="{{user_profile.pg}}" onkeyup="return Validpg();" class="shadow-none bg-gray-100">
+                            </div>
+                           <span id="mpg" style="color:red;"></span>
                        </div> 
     
                        <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">

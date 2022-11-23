@@ -53,9 +53,12 @@
                         }
                     </style>
                     {% for message in messages %}
-                    <h5>{{message}}</h5>
+                    <h5>{{message}}&nbsp;</h5>
                     {% endfor %}
                 </div>
+                         <a href="#" class="">
+                            Welcome <b name="" class="">{{user.username}}&nbsp; &nbsp; &nbsp;</b>
+                        </a>
                          <!-- upload -->
                         <a href="#"
                             class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
@@ -64,7 +67,7 @@
                         </a>
                          <!-- upload dropdown box -->
                         <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
-    
+
                             <!-- notivication header -->
                             <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
                                 <h4>Upload Pics</h4>
@@ -121,7 +124,7 @@
     
                             </div>
                             <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
-                                Your Image size Must be Maxmium 999MB
+                                Your Image Size Must be Maxmium 999MB
                             </div>
                         </div>
                         
@@ -187,7 +190,7 @@
                         </a>
                         <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                             <ul>
-                                <li><a href="/profile/{{username_profile_list}}"> Profile </a></li>
+                                <li><a href="/profile/{{user.username}}"> Profile </a></li>
                                 <li><a href="/settings"> Account setting </a></li>
                                 <li><a href="logout"> Log Out</a></li>
                             </ul>
@@ -374,11 +377,7 @@
                                         </a>
                                         <div class="flex flex-col">
                                             <span class="block capitalize font-semibold"> {{suggestion.user}} </span>
-                                            {% if user_followers == 0 or user_followers == 1 %}
-					                        <span class="block capitalize font-semibold"><b> {{user_followers}} follower</b></span>
-					                        {% else %}
-					                        <span class="block capitalize font-semibold"><b> {{user_followers}} followers</b></span>
-					                        {% endif %}
+					                        <span class="block capitalize font-semibold"><b> {{suggestion.bio}} </b></span>
                                         </div>
                                     </div>
                                     
