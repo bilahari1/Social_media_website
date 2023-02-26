@@ -15,10 +15,10 @@ class Profile(models.Model):
     phone = models.CharField(max_length=10)
     profileimg = models.ImageField(upload_to='profile_images', default='pic.png')
     location = models.CharField(max_length=100, blank=True)
-    tenth = models.IntegerField(blank=True, default=0)
-    twelfth = models.IntegerField(blank=True, default=0)
-    ug = models.IntegerField(blank=True, default=0)
-    pg = models.IntegerField(blank=True, default=0)
+    tenth = models.FloatField(blank=True, default=0)
+    twelfth = models.FloatField(blank=True, default=0)
+    ug = models.FloatField(blank=True, default=0)
+    pg = models.FloatField(blank=True, default=0)
 
     def __str__(self):
         return self.user.username
