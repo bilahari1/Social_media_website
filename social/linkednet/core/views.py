@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .models import Profile, Post, LikePost, FollowersCount, Company
+from .models import Profile, Post, LikePost, FollowersCount, Company, Comment
 from itertools import chain
 import random
 from PIL import Image
@@ -44,7 +44,6 @@ def index(request):
     current_user = User.objects.filter(username=request.user.username)
     final_suggestions_list = [x for x in list(new_suggestions_list) if (x not in list(current_user))]
     random.shuffle(final_suggestions_list)
-
 
     username_profile = []
     username_profile_list = []
@@ -113,7 +112,8 @@ def search(request):
             username_profile_list.append(profile_lists)
 
         username_profile_list = list(chain(*username_profile_list))
-    return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
+    return render(request, 'search.html',
+                  {'user_profile': user_profile, 'username_profile_list': username_profile_list})
 
 
 @login_required(login_url='signin')
@@ -212,7 +212,6 @@ def settings(request):
             user_profile.pg = pg
             user_profile.save()
         if request.FILES.get('image') != None:
-
             image = request.FILES.get('image')
             bio = request.POST['bio']
             location = request.POST['location']
@@ -249,7 +248,8 @@ def signup(request):
                 messages.info(request, 'Username Taken')
                 return redirect('signup')
             else:
-                user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+                user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,
+                                                email=email, password=password)
                 user.save()
 
                 # log user in and redirect to settings page
@@ -311,7 +311,8 @@ def csignup(request):
                 messages.info(request, 'Username Taken')
                 return redirect('csignup')
             else:
-                company = Company(username=username, cname=cname, location=location, website=website, email=email, password=password)
+                company = Company(username=username, cname=cname, location=location, website=website, email=email,
+                                  password=password)
                 company.save()
                 return redirect('signin')
         else:
@@ -321,13 +322,27 @@ def csignup(request):
     else:
         return render(request, 'csignup.html')
 
-# def login_page(request):
-#     post_data = request.POST
-#     user = authenticate(username=post_data['email'], password=post_data['password'])
-#     if user is None:
-#         L.warning('Authentication error wrong credentials')
-#         return HttpResponseRedirect('/')
-#     else:
-#         auth_login(request, user)
-#         L.INFO('Authentication ok')
-#         return HttpResponseRedirect('/')
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        comment = Comment.objects.create(post=post, author=request.user, text=text)
+        return redirect('post_detail', post_id=post_id)
+    else:
+        return render(request, 'add_comment.html', {'post': post})
+
+
+def comment_list(request):
+    post_id = request.GET.get('post_id')
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post=post).select_related('post')
+
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        comment = Comment(text=text, post=post, author=request.user)
+        comment.save()
+        # Redirect to the same page to prevent duplicate form submissions
+        return redirect('comment_list?post_id={}'.format(post_id))
+    return render(request, 'comment_list.html', {'post': post, 'comments': comments})

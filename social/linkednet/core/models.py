@@ -6,6 +6,7 @@ from datetime import datetime
 
 User = get_user_model()
 
+
 # Create your models here.
 
 class Profile(models.Model):
@@ -23,6 +24,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     user = models.CharField(max_length=100)
@@ -33,6 +35,17 @@ class Post(models.Model):
 
     def __str__(self):
         return self.user
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text
+
 
 class LikePost(models.Model):
     post_id = models.CharField(max_length=500)
@@ -48,6 +61,7 @@ class FollowersCount(models.Model):
 
     def __str__(self):
         return self.user
+
 
 class Company(models.Model):
     cid = models.UUIDField(primary_key=True, default=uuid.uuid4)

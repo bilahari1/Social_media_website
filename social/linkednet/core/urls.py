@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('settings', views.settings, name='settings'),
@@ -12,5 +13,5 @@ urlpatterns = [
     path('csignup', views.csignup, name='csignup'),
     path('signin', views.signin, name='signin'),
     path('logout', views.logout, name='logout'),
+    path('comment_list', views.comment_list, name='comment_list'),
 ]
-
