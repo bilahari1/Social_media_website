@@ -324,16 +324,6 @@ def csignup(request):
 
 
 @login_required
-def add_comment(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    if request.method == 'POST':
-        text = request.POST.get('text')
-        comment = Comment.objects.create(post=post, author=request.user, text=text)
-        return redirect('post_detail', post_id=post_id)
-    else:
-        return render(request, 'add_comment.html', {'post': post})
-
-
 def comment_list(request):
     post_id = request.GET.get('post_id')
     post = get_object_or_404(Post, id=post_id)
@@ -344,5 +334,5 @@ def comment_list(request):
         comment = Comment(text=text, post=post, author=request.user)
         comment.save()
         # Redirect to the same page to prevent duplicate form submissions
-        return redirect('comment_list?post_id={}'.format(post_id))
+        return redirect('/comment_list?post_id={}'.format(post_id))
     return render(request, 'comment_list.html', {'post': post, 'comments': comments})
