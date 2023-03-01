@@ -17,6 +17,8 @@
             data: formData,
             success: function (data) {
                 $("#comments").html(data.comment_html);
+                $("#comment-text").val(""); // clear the comment text area
+                $("#comment-form button[type='submit']").prop("disabled", false);
             }
         });
         $("#comment-form")[0].reset();
@@ -56,7 +58,7 @@
         <form id="comment-form">
             {% csrf_token %}
             <input type="hidden" name="post_id" value="{{ post.id }}">
-            <textarea name="text" required></textarea><br>
+            <textarea id="comment-text" name="text" required></textarea><br>
             <button type="submit">Submit</button>
         </form>
     </div>
