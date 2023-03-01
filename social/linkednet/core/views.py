@@ -323,7 +323,7 @@ def csignup(request):
         return render(request, 'csignup.html')
 
 
-@login_required
+@login_required(login_url='signin')
 def comment_list(request):
     post_id = request.GET.get('post_id')
     post = get_object_or_404(Post, id=post_id)
