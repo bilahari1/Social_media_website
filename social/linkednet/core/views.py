@@ -2,9 +2,11 @@ from django.contrib.auth import get_user_model, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.template.loader import render_to_string
+
 from .models import Profile, Post, LikePost, FollowersCount, Company, Comment
 from itertools import chain
 import random
@@ -333,6 +335,8 @@ def comment_list(request):
         text = request.POST.get('text')
         comment = Comment(text=text, post=post, author=request.user)
         comment.save()
-        # Redirect to the same page to prevent duplicate form submissions
-        return redirect('/comment_list?post_id={}'.format(post_id))
+        comments = Comment.objects.filter(post=post).select_related('post')
+        comment_html = render_to_string('comment_list.html', {'comments': comments})
+        return JsonResponse({'comment_html': comment_html})
+
     return render(request, 'comment_list.html', {'post': post, 'comments': comments})
