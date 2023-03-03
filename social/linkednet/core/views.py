@@ -218,6 +218,10 @@ def settings(request):
             bio = request.POST['bio']
             location = request.POST['location']
             phone = request.POST['phone']
+            tenth = request.POST['tenth']
+            twelfth = request.POST['twelfth']
+            ug = request.POST['ug']
+            pg = request.POST['pg']
 
             user_profile.profileimg = image
             user_profile.bio = bio
@@ -333,8 +337,7 @@ def comment_list(request):
 
     if request.method == 'POST':
         text = request.POST.get('text')
-        comment = Comment(text=text, post=post, author=request.user)
-        comment.save()
+        comment = Comment.objects.create(text=text, post=post, author=request.user)
         comments = Comment.objects.filter(post=post).select_related('post')
         comment_html = render_to_string('comment_list.html', {'comments': comments})
         return JsonResponse({'comment_html': comment_html})
