@@ -284,7 +284,10 @@ def signin(request):
 
         if user is not None:
             auth.login(request, user)
-            return redirect('/')
+            if user.is_superuser:
+                return redirect('admin/')
+            else:
+                return redirect('signin')
         else:
             messages.info(request, 'Credentials Invalid')
             return redirect('signin')
