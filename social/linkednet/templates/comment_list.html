@@ -2,6 +2,11 @@
 <html>
 <html lang="en">
 <head>
+    <link
+      href="{% static 'assets/images/img.png' %}"
+      rel="shortcut icon"
+      type="image/png"
+    />
     <title>Comment</title>
     <link rel="stylesheet" href="{% static 'css/cstyle.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -21,7 +26,8 @@
             success: function (data) {
                 $("#comments").html(data.comment_html);
                 $("#comment-text").val("");
-                $("#comment-form button[type='submit']").prop("disabled", false); location.reload();
+                $("#comment-form button[type='submit']").prop("disabled", false);
+                location.reload();
             }
         });
         $("#comment-form")[0].reset();

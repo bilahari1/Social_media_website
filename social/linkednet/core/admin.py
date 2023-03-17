@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from .models import Profile, Post, LikePost, FollowersCount, Company, Comment
 
 # Register your models here.

@@ -6,7 +6,6 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
-
 from .models import Profile, Post, LikePost, FollowersCount, Company, Comment
 from itertools import chain
 import random
@@ -114,6 +113,14 @@ def search(request):
             username_profile_list.append(profile_lists)
 
         username_profile_list = list(chain(*username_profile_list))
+
+        if user_object.is_staff:
+            company_object = Company.objects.filter(user=user_object).first()
+            if company_object:
+                company_profile_list = Profile.objects.filter(company=company_object)
+                return render(request, 'search.html',
+                              {'user_profile': user_profile, 'company_profile_list': company_profile_list})
+
     return render(request, 'search.html',
                   {'user_profile': user_profile, 'username_profile_list': username_profile_list})
 
@@ -284,10 +291,13 @@ def signin(request):
 
         if user is not None:
             auth.login(request, user)
-            if user.is_superuser:
-                return redirect('admin/')
+            if user.is_staff:
+                if user.is_superuser:
+                    return redirect('admin/')
+                else:
+                    return redirect('csignup')
             else:
-                return redirect('signin')
+                return redirect('/')
         else:
             messages.info(request, 'Credentials Invalid')
             return redirect('signin')
@@ -320,6 +330,7 @@ def csignup(request):
                 messages.info(request, 'Username Taken')
                 return redirect('csignup')
             else:
+                user = User.objects.create_user(username=username, password=password, is_staff=True)
                 company = Company(username=username, cname=cname, location=location, website=website, email=email,
                                   password=password)
                 company.save()

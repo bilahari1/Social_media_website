@@ -64,6 +64,7 @@ class FollowersCount(models.Model):
 
 
 class Company(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
     cid = models.UUIDField(primary_key=True, default=uuid.uuid4)
     username = models.CharField(max_length=50, default=0)
     cname = models.CharField(max_length=100)
