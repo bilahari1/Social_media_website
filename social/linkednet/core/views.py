@@ -6,7 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
-from .models import Profile, Post, LikePost, FollowersCount, Company, Comment
+from django.utils import timezone
+from .models import Profile, Post, LikePost, FollowersCount, Company, Comment, JobPosting
 from itertools import chain
 import random
 from PIL import Image
@@ -295,7 +296,7 @@ def signin(request):
                 if user.is_superuser:
                     return redirect('admin/')
                 else:
-                    return redirect('csignup')
+                    return redirect('cindex')
             else:
                 return redirect('/')
         else:
@@ -331,7 +332,8 @@ def csignup(request):
                 return redirect('csignup')
             else:
                 user = User.objects.create_user(username=username, password=password, is_staff=True)
-                company = Company(username=username, cname=cname, location=location, website=website, email=email,
+                company = Company(user=user, username=username, cname=cname, location=location, website=website,
+                                  email=email,
                                   password=password)
                 company.save()
                 return redirect('signin')
@@ -357,3 +359,27 @@ def comment_list(request):
         return JsonResponse({'comment_html': comment_html})
 
     return render(request, 'comment_list.html', {'post': post, 'comments': comments})
+
+
+@login_required(login_url='signin')
+def cindex(request):
+    user_object = User.objects.get(username=request.user.username)
+    company_profile = Company.objects.get(user=user_object)
+    user_profile = Profile.objects.get(user=user_object)
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        company = request.user
+        location = request.POST.get('location')
+        description = request.POST.get('description')
+        requirements = request.POST.get('requirements')
+        responsibilities = request.POST.get('responsibilities')
+        created_at = timezone.now()
+        updated_at = timezone.now()
+
+        job_posting = JobPosting.objects.create(title=title, company=company, location=location,description=description,
+                                                requirements=requirements, responsibilities=responsibilities,
+                                                created_at=created_at, updated_at=updated_at)
+        return redirect('cindex')
+
+    return render(request, 'cindex.html')

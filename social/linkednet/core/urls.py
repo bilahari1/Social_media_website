@@ -12,6 +12,8 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('csignup', views.csignup, name='csignup'),
     path('signin', views.signin, name='signin'),
+    path('cindex', views.cindex, name='cindex'),
+    # path('jobposting', views.jobposting, name='jobposting'),
     path('logout', views.logout, name='logout'),
     path('comment_list', views.comment_list, name='comment_list'),
 ]

@@ -12,15 +12,17 @@
       rel="shortcut icon"
       type="image/png"
     />
-    <title>Home</title>
+    <title>Company Feed | LinkedNet</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -60,9 +62,9 @@
                     <h5>{{message}}&nbsp;</h5>
                     {% endfor %}
                 </div>
-                         <a href="#" class="">
-                            Welcome <b name="" class="">{{user.username}}&nbsp; &nbsp; &nbsp;</b>
-                        </a>
+
+                            Welcome <b name="" class="">&nbsp;{{user.username}}&nbsp; &nbsp; &nbsp;</b>
+
                          <!-- upload -->
                         <a href="#"
                             class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
@@ -128,7 +130,7 @@
 
                             </div>
                             <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
-                                Your Image Size Must be Maxmium 999MB
+                                Size Must be Maxmium 999MB
                             </div>
                         </div>
 
@@ -190,17 +192,14 @@
                         <!-- profile -->
 
                         <a href="#">
-                            <img src="{{user_profile.profileimg.url}}" class="header-avatar" alt="">
+                            <img src="{{ MEDIA_URL }}media/pic.png" class="header-avatar" alt="">
                         </a>
                         <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                             <ul>
-                                <li><a href="/profile/{{user.username}}"> Profile </a></li>
-                                <li><a href="/settings"> Account setting </a></li>
-                                <li><a href="#"> Change password </a></li>
+                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#myModal">Post Job</a></li>
                                 <li><a href="logout"> Log Out</a></li>
                             </ul>
                         </div>
-
                     </div>
                 </div>
             </header>
@@ -210,6 +209,32 @@
                 <!--<h1 class="lg:text-2xl text-lg font-extrabold leading-none text-gray-900 tracking-tight mb-5"> Feed </h1>--->
 
                 <div class="lg:flex justify-center lg:space-x-10 lg:space-y-0 space-y-5">
+
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Post Job</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                                            </button>
+                                          </div>
+                                          <div class="modal-body">
+                                              <form method="POST" action="cindex">
+                                                  {% csrf_token %}
+                                                  <input type="text" name="title" placeholder="Title" class="form-control mb-3" required >
+                                                  <input type="text" name="location" placeholder="Location" class="form-control mb-3" required >
+                                                  <input type="text" name="description" placeholder="Description" class="form-control mb-3" required >
+                                                  <input type="text" name="requirements" placeholder="Requirements" class="form-control mb-3" required >
+                                                  <input type="text" name="responsibilities" placeholder="Responsibilities" class="form-control mb-3" required >
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="submit" class="btn btn-primary">Post Job</button>
+                                          </div>
+                                            </form>
+                                        </div>
+                                      </div>
+                                    </div>
 
                     <!-- left sidebar-->
                     <div class="space-y-5 flex-shrink-0 lg:w-7/12">
@@ -227,7 +252,7 @@
                                             <img src="{% static 'assets/images/avatars/avatar-2.jpg' %}" class="bg-gray-200 border border-white rounded-full w-8 h-8">
                                         </div>
                                     </a> -->
-                                    <span class="block font-semibold "><a href="/profile/{{post.user}}">@{{post.user}}</a></span>
+<!--                                    <span class="block font-semibold "><a href="/profile/{{post.user}}">@{{post.user}}</a></span>-->
                                 </div>
                               <div>
                                 <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
@@ -268,11 +293,11 @@
                               </div>
                             </div>
 
-                            <div uk-lightbox>
-                                <a href="{{post.image.url}}">
-                                    <img src="{{post.image.url}}" alt="">
-                                </a>
-                            </div>
+<!--                            <div uk-lightbox>-->
+<!--                                <a href="{{post.image.url}}">-->
+<!--                                    <img src="{{post.image.url}}" alt="">-->
+<!--                                </a>-->
+<!--                            </div>-->
 
 
                             <div class="py-3 px-4 space-y-3">
@@ -430,8 +455,6 @@
     <script src="{% static 'assets/js/uikit.js' %}"></script>
     <script src="{% static 'assets/js/simplebar.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
-
-
     <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
 </body>
 
