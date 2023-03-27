@@ -55,7 +55,7 @@
                         <div>
                     <style>
                         h5{
-                            color: red;
+                            color: black;
                         }
                     </style>
                     {% for message in messages %}
@@ -196,6 +196,7 @@
                         </a>
                         <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                             <ul>
+                                <li><a href="joblisting">Posted Jobs</a></li>
                                 <li><a href="#" data-bs-toggle="modal" data-bs-target="#myModal">Post Job</a></li>
                                 <li><a href="logout"> Log Out</a></li>
                             </ul>
@@ -220,13 +221,18 @@
                                             </button>
                                           </div>
                                           <div class="modal-body">
-                                              <form method="POST" action="cindex">
+                                              <form method="POST" action="jobposting">
                                                   {% csrf_token %}
-                                                  <input type="text" name="title" placeholder="Title" class="form-control mb-3" required >
-                                                  <input type="text" name="location" placeholder="Location" class="form-control mb-3" required >
-                                                  <input type="text" name="description" placeholder="Description" class="form-control mb-3" required >
-                                                  <input type="text" name="requirements" placeholder="Requirements" class="form-control mb-3" required >
-                                                  <input type="text" name="responsibilities" placeholder="Responsibilities" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Title</h5>
+                                                  <input type="text" name="title" class="form-control mb-3" required autofocus>
+                                                  <h5 class="modal-title">Location</h5>
+                                                  <input type="text" name="location" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Description</h5>
+                                                  <input type="text" name="description" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Requirements</h5>
+                                                  <input type="text" name="requirements" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Responsibilities</h5>
+                                                  <input type="text" name="responsibilities" class="form-control mb-3" required >
                                           </div>
                                           <div class="modal-footer">
                                               <button type="submit" class="btn btn-primary">Post Job</button>

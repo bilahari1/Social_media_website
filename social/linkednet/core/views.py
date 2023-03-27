@@ -336,7 +336,9 @@ def csignup(request):
                                   email=email,
                                   password=password)
                 company.save()
-                return redirect('signin')
+                user_login = auth.authenticate(username=username, password=password)
+                auth.login(request, user_login)
+                return redirect('cindex')
         else:
             messages.info(request, 'Password Not Matching')
             return redirect('csignup')
@@ -365,7 +367,13 @@ def comment_list(request):
 def cindex(request):
     user_object = User.objects.get(username=request.user.username)
     company_profile = Company.objects.get(user=user_object)
-    user_profile = Profile.objects.get(user=user_object)
+
+    return render(request, 'cindex.html')
+
+
+@login_required(login_url='signin')
+def jobposting(request):
+    user_object = User.objects.get(username=request.user.username)
 
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -374,12 +382,42 @@ def cindex(request):
         description = request.POST.get('description')
         requirements = request.POST.get('requirements')
         responsibilities = request.POST.get('responsibilities')
-        created_at = timezone.now()
-        updated_at = timezone.now()
 
-        job_posting = JobPosting.objects.create(title=title, company=company, location=location,description=description,
-                                                requirements=requirements, responsibilities=responsibilities,
-                                                created_at=created_at, updated_at=updated_at)
-        return redirect('cindex')
+        job_posting = JobPosting.objects.create(title=title, company=company, location=location,
+                                                description=description, requirements=requirements,
+                                                responsibilities=responsibilities)
+        return redirect('joblisting')
 
     return render(request, 'cindex.html')
+
+
+@login_required(login_url='signin')
+def joblisting(request):
+    jobs = JobPosting.objects.filter(company=request.user.username).order_by('-created_at')
+    context = {'jobs': jobs}
+    return render(request, 'joblisting.html', context)
+
+
+@login_required(login_url='signin')
+def job_delete(request, jid):
+    job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
+    if request.method == 'POST':
+        job.delete()
+        return redirect('joblisting')
+    context = {'job': job}
+    return render(request, 'job_delete.html', context)
+
+
+@login_required(login_url='signin')
+def job_edit(request, jid):
+    job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
+    if request.method == 'POST':
+        job.title = request.POST.get('title')
+        job.location = request.POST.get('location')
+        job.description = request.POST.get('description')
+        job.requirements = request.POST.get('requirements')
+        job.responsibilities = request.POST.get('responsibilities')
+        job.save()
+        return redirect('joblisting')
+    context = {'job': job}
+    return render(request, 'joblisting.html', context)

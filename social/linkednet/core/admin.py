@@ -8,5 +8,12 @@ admin.site.register(LikePost)
 admin.site.register(FollowersCount)
 admin.site.register(Company)
 admin.site.register(Comment)
-admin.site.register(JobPosting)
 
+
+class JobPostingAdmin(admin.ModelAdmin):
+    list_display = (
+        'jid', 'title', 'company', 'location', 'description', 'requirements', 'responsibilities', 'created_at',
+        'updated_at')
+
+
+admin.site.register(JobPosting, JobPostingAdmin)

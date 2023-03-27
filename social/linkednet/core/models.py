@@ -78,6 +78,7 @@ class Company(models.Model):
 
 
 class JobPosting(models.Model):
+    jid = models.AutoField(primary_key=True, unique=True)
     title = models.CharField(max_length=100)
     company = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
