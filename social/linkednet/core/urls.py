@@ -15,6 +15,7 @@ urlpatterns = [
     path('cindex', views.cindex, name='cindex'),
     path('jobposting', views.jobposting, name='jobposting'),
     path('joblisting', views.joblisting, name='joblisting'),
+    path('userjoblisting', views.userjoblisting, name='userjoblisting'),
     path('job_delete/<int:jid>', views.job_delete, name='job_delete'),
     path('job_edit/<int:jid>', views.job_edit, name='job_edit'),
     path('logout', views.logout, name='logout'),

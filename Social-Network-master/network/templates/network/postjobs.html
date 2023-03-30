@@ -1,0 +1,100 @@
+{% extends "network/layout.html" %}
+
+{% load static %}
+
+{% block body %}
+    <div class="main-div">
+        <div class="left-div">
+            <nav class="head heading">
+                {% if page == 'all_posts' %}
+                    <h3>All Posts</h3>
+                {% elif page == 'following' %}
+                    <h3>Following</h3>
+                {% elif page == 'postjobs' %}
+                    <h3>Post Jobs</h3>
+                {% elif page == 'saved' %}
+                    <h3>Saved</h3>
+                {% elif page == 'profile' %}
+                    <h3>Profile</h3>
+                {% else %}
+                    <h3>Explore</h3>
+                {% endif %}
+            </nav>
+            <div class="left-div-content">
+                <div class="posts-view">
+                    {% block profile %}
+                    {% endblock %}
+                    <div class="main-div-content">
+                            <button type="button" class="btn btn-success new-post-btn mt-2 ml-2" data-toggle="modal" data-target="#exampleModalCenter">
+                              Post Job
+                            </button>
+
+                            <div>
+                            <ul class="mx-auto">
+                                      {% for job in jobs %}
+                                        <li class="job-card">
+                                          <a href="#" data-bs-toggle="modal" data-bs-target="#dmodal-{{ job.jid }}">
+                                            <h3>{{ job.title }}</h3>
+                                          </a>
+                                          <p class="company-location">@{{ job.company }} - {{ job.location }}</p>
+                                        </li>
+                                    {% endfor %}
+                            </ul>
+                            </div>
+
+                            <!-- Modal -->
+                                <div class="modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle"><b>Post Jobs</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+
+
+
+
+                                      </div>
+                                      <div class="modal-body">
+
+                                          <form method="POST" action="jobposting">
+                                                  {% csrf_token %}
+                                                  <h5 class="modal-title">Title</h5>
+                                                  <input type="text" name="title" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Location</h5>
+                                                  <input type="text" name="location" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Description</h5>
+                                                  <input type="text" name="description" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Qualification</h5>
+                                                  <input type="text" name="qualifications" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Requirements</h5>
+                                                  <input type="text" name="requirements" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Responsibilities</h5>
+                                                  <input type="text" name="responsibilities" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Website</h5>
+                                                  <input type="text" name="website" class="form-control mb-3" required >
+                                                  <h5 class="modal-title">Salary</h5>
+                                                  <input type="text" name="salary" class="form-control mb-3" required >
+
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success new-post-btn">Submit</button>
+                                          </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

@@ -231,12 +231,12 @@
                                     <ul class="mx-auto">
                                       {% for job in jobs %}
                                         <li class="job-card">
-                                          <a href="#">
+                                          <a href="#" data-bs-toggle="modal" data-bs-target="#dmodal-{{ job.jid }}">
                                             <h3>{{ job.title }}</h3>
                                           </a>
                                           <p class="company-location">{{ job.company }} - {{ job.location }}</p>
                                           <div class="job-buttons">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#EditModal">
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#EditModal-{{ job.jid }}">
                                               <button class="btn btn-primary">Edit</button>
                                             </a>
                                             <form action="{% url 'job_delete' job.pk %}" method="POST">
@@ -245,18 +245,18 @@
                                             </form>
                                           </div>
                                         </li>
-
-                                        <!--- Edit modal --->
-                                     <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                     <!--- Edit modal --->
+                                     <div class="modal fade" id="EditModal-{{ job.jid }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                       <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                           <div class="modal-header">
-                                            <h4 class="modal-title" id="EditModalLabel">Edit Job</h4>
+                                            <h4 class="modal-title" id="EditModalLabel">Edit Job Details</h4>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                             </button>
                                           </div>
                                           <div class="modal-body">
-                                              <form method="POST" action="job_edit/{{ job.jid }}">
+                                              <form method="POST" action="{% url 'job_edit' job.pk %}">
+
                                                   {% csrf_token %}
                                                   <h5 class="modal-title">Title</h5>
                                                   <input type="text" name="title" value="{{ job.title }}" class="form-control mb-3" required>
@@ -276,6 +276,30 @@
                                         </div>
                                       </div>
                                     </div>
+
+                                    <!--- View modal --->
+                                    <div class="modal" tabindex="-1" id="dmodal-{{ job.jid }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Job Details</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        <h3>{{ job.title }}</h3>
+                                                        <p class="company-location">{{ job.company }} - {{ job.location }}</p>
+                                                        <h5>Description</h5>
+                                                        <p>{{ job.description }}</p><br>
+                                                        <h5>Requirements</h5>
+                                                        <p>{{ job.requirements }}</p><br>
+                                                        <h5>Responsibilities</h5>
+                                                        <p>{{ job.responsibilities }}</p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                       {% endfor %}
                                     </ul>

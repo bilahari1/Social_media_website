@@ -421,3 +421,10 @@ def job_edit(request, jid):
         return redirect('joblisting')
     context = {'job': job}
     return render(request, 'joblisting.html', context)
+
+
+@login_required(login_url='signin')
+def userjoblisting(request):
+    jobs = JobPosting.objects.all().order_by('-created_at')
+    context = {'jobs': jobs}
+    return render(request, 'userjob.html', context)
