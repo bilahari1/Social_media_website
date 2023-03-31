@@ -1,0 +1,94 @@
+{% extends "network/layout.html" %}
+
+{% load static %}
+
+{% block body %}
+    <div class="main-div">
+        <div class="left-div">
+            <nav class="head heading">
+                {% if page == 'all_posts' %}
+                    <h3>All Posts</h3>
+                {% elif page == 'following' %}
+                    <h3>Following</h3>
+                {% elif page == 'userjobs' %}
+                    <h3>Jobs</h3>
+                {% elif page == 'saved' %}
+                    <h3>Saved</h3>
+                {% elif page == 'profile' %}
+                    <h3>Profile</h3>
+                {% else %}
+                    <h3>Explore</h3>
+                {% endif %}
+            </nav>
+            <div class="left-div-content">
+                <div class="posts-view">
+                    {% block profile %}
+                    {% endblock %}
+                    <div class="main-div-content">
+
+                                    <div>
+                                        <ul class="mx-auto">
+                                                  {% for job in jobs %}
+                                                    <li class="job-card">
+                                                            {% if profile_pic_urls %}
+                                                                <div class="small-profilepic" style="background-image: url({{ profile_pic_urls }})"></div>
+                                                            {% endif %}
+                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#dmodal-{{ job.jid }}">
+                                                        <h3>{{ job.title }}</h3>
+                                                      </a>
+                                                      <a href="{% url 'profile' job.company %}"><p class="company-location">@{{ job.company }} - {{ job.location }}</p></a>
+                                                        <div class="job-buttons">
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#EditModal-{{ job.jid }}">
+                                                              <button class="btn btn-primary">Apply</button>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+
+
+                                                    <div class="modal" tabindex="-1" id="dmodal-{{ job.jid }}">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Job Details</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                <h3>{{ job.title }}</h3>
+                                                                <p class="company-location">{{ job.company }} - {{ job.location }}</p>
+                                                                <h5>Description</h5>
+                                                                <p>{{ job.description }}</p><br>
+                                                                <h5>Requirements</h5>
+                                                                <p>{{ job.requirements }}</p><br>
+                                                                <h5>Responsibilities</h5>
+                                                                <p>{{ job.responsibilities }}</p>
+                                                                <h5>Qualifications</h5>
+                                                                <p>{{ job.qualifications }}</p>
+                                                                <h5>Responsibilities</h5>
+                                                                <p>{{ job.responsibilities }}</p>
+                                                                <h5>Website</h5>
+                                                                <p>{{ job.website }}</p>
+                                                                <h5>Salary</h5>
+                                                                <p>{{ job.salary }}</p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

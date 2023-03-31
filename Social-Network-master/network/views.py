@@ -1,3 +1,5 @@
+from multiprocessing.sharedctypes import template
+
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -450,7 +452,7 @@ def postjobs(request):
         followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
         suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).exclude(
             username='admin').order_by("?")[:6]
-        jobs = JobPosting.objects.all()
+        jobs = JobPosting.objects.filter(company=request.user.username).order_by('-created_at')
         return render(request, "network/postjobs.html", {
             "posts": posts,
             "suggestions": suggestions,
@@ -484,4 +486,53 @@ def jobposting(request):
         return redirect('postjobs')
 
     return redirect(request, 'postjobs')
+
+
+def job_delete(request, jid):
+    job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
+    if request.method == 'POST':
+        job.delete()
+        return redirect('postjobs')
+    context = {'job': job}
+    return render(request, 'postjobs.html', context)
+
+def job_edit(request, jid):
+    job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        location = request.POST.get('location')
+        description = request.POST.get('description')
+        qualifications = request.POST.get('qualifications')
+        requirements = request.POST.get('requirements')
+        responsibilities = request.POST.get('responsibilities')
+        website = request.POST.get('website')
+        salary = request.POST.get('salary')
+        job.save()
+        return redirect('postjobs')
+    context = {'job': job}
+    return render(request, 'postjobs.html', context)
+
+def userjobs(request):
+    following_user = Follower.objects.filter(followers=request.user).values('user')
+    all_posts = Post.objects.filter(creater__in=following_user).order_by('-date_created')
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get('page')
+    if page_number is None:
+        page_number = 1
+    posts = paginator.get_page(page_number)
+    followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
+    suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).exclude(
+        username='admin').order_by("?")[:6]
+    jobs = JobPosting.objects.all().order_by('-created_at')
+    for job in jobs:
+        cmpny = job.company
+        user = User.objects.filter(username=cmpny).first()
+        if user:
+            profile_pic_urls = user.profile_pic.url
+    return render(request, 'network/userjobs.html', {
+        "suggestions": suggestions,
+        "profile_pic_urls": profile_pic_urls,
+        "page": "userjobs",
+        "jobs": jobs
+    })
 
