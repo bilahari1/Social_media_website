@@ -96,12 +96,12 @@
                                               <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                   <div class="modal-header">
-                                                    <h4 class="modal-title" id="EditModalLabel">Edit Job Details</h4>
+                                                      <h5 class="modal-title" id="EditModalLabel"><b>Edit Job Details</b></h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                     </button>
                                                   </div>
                                                   <div class="modal-body">
-                                                      <form method="POST" action="n/job_edit/job.pk">
+                                                      <form method="POST" action="{% url 'job_edit' job.pk %}">
 
                                                           {% csrf_token %}
                                                           <h5 class="modal-title">Title</h5>
@@ -134,7 +134,7 @@
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title">Job Details</h5>
+                                                                <h5 class="modal-title"><b>Job Details</b></h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
@@ -146,13 +146,13 @@
                                                                 <h5>Requirements</h5>
                                                                 <p>{{ job.requirements }}</p><br>
                                                                 <h5>Responsibilities</h5>
-                                                                <p>{{ job.responsibilities }}</p>
+                                                                <p>{{ job.responsibilities }}</p><br>
                                                                 <h5>Qualifications</h5>
-                                                                <p>{{ job.qualifications }}</p>
+                                                                <p>{{ job.qualifications }}</p><br>
                                                                 <h5>Responsibilities</h5>
-                                                                <p>{{ job.responsibilities }}</p>
+                                                                <p>{{ job.responsibilities }}</p><br>
                                                                 <h5>Website</h5>
-                                                                <p>{{ job.website }}</p>
+                                                                <p>{{ job.website }}</p><br>
                                                                 <h5>Salary</h5>
                                                                 <p>{{ job.salary }}</p>
 

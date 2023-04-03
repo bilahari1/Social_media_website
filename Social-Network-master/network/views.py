@@ -1,5 +1,3 @@
-from multiprocessing.sharedctypes import template
-
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -112,16 +110,15 @@ def cregister(request):
         user = request.user
         username = request.POST["username"]
         cname = request.POST["cname"]
-        cid = user.id
         location = request.POST["location"]
         website = request.POST["website"]
         email = request.POST["email"]
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
-        cprofile = request.FILES.get("cprofile")
+        profile = request.FILES.get("profile")
         print(f"--------------------------Profile: {profile}----------------------------")
-        ccover = request.FILES.get('ccover')
-        print(f"--------------------------Cover: {ccover}----------------------------")
+        cover = request.FILES.get('cover')
+        print(f"--------------------------Cover: {cover}----------------------------")
 
         if password == confirmation:
             if User.objects.filter(email=email).exists():
@@ -136,10 +133,10 @@ def cregister(request):
         try:
             user = User.objects.create_user(username, email, password, is_staff=True)
             if profile is not None:
-                user.profile_pic = cprofile
+                user.profile_pic = profile
             else:
                 user.profile_pic = "profile_pic/no_pic.png"
-            user.cover = ccover
+            user.cover = cover
             user.save()
             company = Company(user=user, username=username, cname=cname, location=location, website=website,
                               email=email)
@@ -154,7 +151,7 @@ def cregister(request):
     else:
         return render(request, "network/c_register.html")
 
-
+@login_required(login_url="/")
 def profile(request, username):
     user = User.objects.get(username=username)
     all_posts = Post.objects.filter(creater=user).order_by('-date_created')
@@ -187,7 +184,7 @@ def profile(request, username):
         "following_count": following_count
     })
 
-
+@login_required(login_url="/")
 def following(request):
     if request.user.is_authenticated:
         following_user = Follower.objects.filter(followers=request.user).values('user')
@@ -208,7 +205,7 @@ def following(request):
     else:
         return HttpResponseRedirect(reverse('login'))
 
-
+@login_required(login_url="/")
 def saved(request):
     if request.user.is_authenticated:
         all_posts = Post.objects.filter(savers=request.user).order_by('-date_created')
@@ -231,7 +228,7 @@ def saved(request):
         return HttpResponseRedirect(reverse('login'))
 
 
-@login_required
+@login_required(login_url="/")
 def create_post(request):
     if request.method == 'POST':
         text = request.POST.get('text')
@@ -245,7 +242,7 @@ def create_post(request):
         return HttpResponse("Method must be 'POST'")
 
 
-@login_required
+@login_required(login_url="/")
 @csrf_exempt
 def edit_post(request, post_id):
     if request.method == 'POST':
@@ -439,7 +436,7 @@ def delete_post(request, post_id):
     else:
         return HttpResponseRedirect(reverse('login'))
 
-
+@login_required(login_url="/")
 def postjobs(request):
     if request.user.is_authenticated:
         following_user = Follower.objects.filter(followers=request.user).values('user')
@@ -461,7 +458,7 @@ def postjobs(request):
         })
     return HttpResponseRedirect(reverse('network/postjobs.html'))
 
-
+@login_required(login_url="/")
 def jobposting(request):
     user_object = User.objects.get(username=request.user.username)
     company_object = Company.objects.get(user=user_object)
@@ -487,7 +484,7 @@ def jobposting(request):
 
     return redirect(request, 'postjobs')
 
-
+@login_required(login_url="/")
 def job_delete(request, jid):
     job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
     if request.method == 'POST':
@@ -496,22 +493,24 @@ def job_delete(request, jid):
     context = {'job': job}
     return render(request, 'postjobs.html', context)
 
+@login_required(login_url="/")
 def job_edit(request, jid):
     job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
     if request.method == 'POST':
-        title = request.POST.get('title')
-        location = request.POST.get('location')
-        description = request.POST.get('description')
-        qualifications = request.POST.get('qualifications')
-        requirements = request.POST.get('requirements')
-        responsibilities = request.POST.get('responsibilities')
-        website = request.POST.get('website')
-        salary = request.POST.get('salary')
+        job.title = request.POST.get('title')
+        job.location = request.POST.get('location')
+        job.description = request.POST.get('description')
+        job.qualifications = request.POST.get('qualifications')
+        job.requirements = request.POST.get('requirements')
+        job.responsibilities = request.POST.get('responsibilities')
+        job.website = request.POST.get('website')
+        job.salary = request.POST.get('salary')
         job.save()
         return redirect('postjobs')
     context = {'job': job}
     return render(request, 'postjobs.html', context)
 
+@login_required(login_url="/")
 def userjobs(request):
     following_user = Follower.objects.filter(followers=request.user).values('user')
     all_posts = Post.objects.filter(creater__in=following_user).order_by('-date_created')
@@ -524,15 +523,18 @@ def userjobs(request):
     suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).exclude(
         username='admin').order_by("?")[:6]
     jobs = JobPosting.objects.all().order_by('-created_at')
+    job_list = []
     for job in jobs:
         cmpny = job.company
         user = User.objects.filter(username=cmpny).first()
         if user:
             profile_pic_urls = user.profile_pic.url
+        else:
+            profile_pic_urls = None
+        job_list.append({"job": job, "profile_pic_url": profile_pic_urls})
     return render(request, 'network/userjobs.html', {
         "suggestions": suggestions,
-        "profile_pic_urls": profile_pic_urls,
+        "job_list": job_list,
         "page": "userjobs",
-        "jobs": jobs
     })
 

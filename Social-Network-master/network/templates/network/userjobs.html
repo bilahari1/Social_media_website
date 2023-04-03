@@ -28,24 +28,26 @@
 
                                     <div>
                                         <ul class="mx-auto">
-                                                  {% for job in jobs %}
-                                                    <li class="job-card">
-                                                            {% if profile_pic_urls %}
-                                                                <div class="small-profilepic" style="background-image: url({{ profile_pic_urls }})"></div>
-                                                            {% endif %}
-                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#dmodal-{{ job.jid }}">
-                                                        <h3>{{ job.title }}</h3>
-                                                      </a>
-                                                      <a href="{% url 'profile' job.company %}"><p class="company-location">@{{ job.company }} - {{ job.location }}</p></a>
-                                                        <div class="job-buttons">
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#EditModal-{{ job.jid }}">
-                                                              <button class="btn btn-primary">Apply</button>
-                                                            </a>
-                                                        </div>
-                                                    </li>
+                                                  {% for job_obj in job_list %}
+                                                        {% with job=job_obj.job profile_pic_url=job_obj.profile_pic_url %}
+                                                            <li class="job-card">
+                                                                {% if profile_pic_url %}
+                                                                    <div class="small-profilepic" style="background-image: url({{ profile_pic_url }})"></div>
+                                                                {% endif %}
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#dmodal-{{ job.jid }}">
+                                                                    <h3>{{ job.title }}</h3>
+                                                                </a>
+                                                                <a href="{% url 'profile' job.company %}"><p class="company-location">@{{ job.company }} - {{ job.location }}</p></a>
+                                                                <p>Salary : {{ job.salary }}</p>
+                                                                <div class="job-buttons">
+                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#EditModal-{{ job.jid }}">
+                                                                        <button class="btn btn-primary">Apply Now</button>
+                                                                    </a>
+                                                                </div>
+                                                            </li>
+                                                        {% endwith %}
 
-
-                                                    <div class="modal" tabindex="-1" id="dmodal-{{ job.jid }}">
+                                                    <div class="modal" tabindex="-1" id="dmodal-{{ job.pk }}">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -75,6 +77,39 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                            <!--- View modal --->
+                                            <div class="modal" tabindex="-1" id="dmodal-{{ job.jid }}">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"><b>Job Details</b></h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                <h3>{{ job.title }}</h3>
+                                                                <p class="company-location">{{ job.company }} - {{ job.location }}</p>
+                                                                <h5>Description</h5>
+                                                                <p>{{ job.description }}</p><br>
+                                                                <h5>Requirements</h5>
+                                                                <p>{{ job.requirements }}</p><br>
+                                                                <h5>Responsibilities</h5>
+                                                                <p>{{ job.responsibilities }}</p><br>
+                                                                <h5>Qualifications</h5>
+                                                                <p>{{ job.qualifications }}</p><br>
+                                                                <h5>Responsibilities</h5>
+                                                                <p>{{ job.responsibilities }}</p><br>
+                                                                <h5>Website</h5>
+                                                                <p>{{ job.website }}</p><br>
+                                                                <h5>Salary</h5>
+                                                                <p>{{ job.salary }}</p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
 
                                             {% endfor %}
                                         </ul>
