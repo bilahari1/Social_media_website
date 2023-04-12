@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 import json
@@ -12,6 +13,7 @@ from .models import *
 User = get_user_model()
 
 
+@never_cache
 def index(request):
     all_posts = Post.objects.all().order_by('-date_created')
     paginator = Paginator(all_posts, 10)
@@ -151,6 +153,8 @@ def cregister(request):
     else:
         return render(request, "network/c_register.html")
 
+
+@never_cache
 @login_required(login_url="/")
 def profile(request, username):
     user = User.objects.get(username=username)
@@ -184,6 +188,8 @@ def profile(request, username):
         "following_count": following_count
     })
 
+
+@never_cache
 @login_required(login_url="/")
 def following(request):
     if request.user.is_authenticated:
@@ -205,6 +211,8 @@ def following(request):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
+@never_cache
 @login_required(login_url="/")
 def saved(request):
     if request.user.is_authenticated:
@@ -228,6 +236,7 @@ def saved(request):
         return HttpResponseRedirect(reverse('login'))
 
 
+@never_cache
 @login_required(login_url="/")
 def create_post(request):
     if request.method == 'POST':
@@ -242,6 +251,7 @@ def create_post(request):
         return HttpResponse("Method must be 'POST'")
 
 
+@never_cache
 @login_required(login_url="/")
 @csrf_exempt
 def edit_post(request, post_id):
@@ -436,6 +446,8 @@ def delete_post(request, post_id):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+
+@never_cache
 @login_required(login_url="/")
 def postjobs(request):
     if request.user.is_authenticated:
@@ -458,6 +470,8 @@ def postjobs(request):
         })
     return HttpResponseRedirect(reverse('network/postjobs.html'))
 
+
+@never_cache
 @login_required(login_url="/")
 def jobposting(request):
     user_object = User.objects.get(username=request.user.username)
@@ -484,6 +498,8 @@ def jobposting(request):
 
     return redirect(request, 'postjobs')
 
+
+@never_cache
 @login_required(login_url="/")
 def job_delete(request, jid):
     job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
@@ -493,6 +509,8 @@ def job_delete(request, jid):
     context = {'job': job}
     return render(request, 'postjobs.html', context)
 
+
+@never_cache
 @login_required(login_url="/")
 def job_edit(request, jid):
     job = get_object_or_404(JobPosting, jid=jid, company=request.user.username)
@@ -510,6 +528,8 @@ def job_edit(request, jid):
     context = {'job': job}
     return render(request, 'postjobs.html', context)
 
+
+@never_cache
 @login_required(login_url="/")
 def userjobs(request):
     following_user = Follower.objects.filter(followers=request.user).values('user')
@@ -537,4 +557,3 @@ def userjobs(request):
         "job_list": job_list,
         "page": "userjobs",
     })
-
