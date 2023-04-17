@@ -27,7 +27,8 @@
                     <div class="main-div-content">
 
                                     <div>
-                                        <ul class="mx-auto">
+                                        <input type="text" id="search" placeholder="Search..." onkeyup="searchJobs()">
+                                        <ul id="job-list" class="mx-auto">
                                                   {% for job_obj in job_list %}
                                                         {% with job=job_obj.job profile_pic_url=job_obj.profile_pic_url %}
                                                             <li class="job-card">
