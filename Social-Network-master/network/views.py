@@ -558,11 +558,3 @@ def userjobs(request):
         "page": "userjobs",
     })
 
-
-@never_cache
-@login_required(login_url="/")
-def search_jobs(request):
-    search_term = request.GET.get('search')
-    jobs = JobPosting.objects.filter(title__icontains=search_term)
-    job_list_html = render(request, 'userjobs.html', {'job_list': jobs}).content.decode('utf-8')
-    return JsonResponse({'job_list_html': job_list_html})
