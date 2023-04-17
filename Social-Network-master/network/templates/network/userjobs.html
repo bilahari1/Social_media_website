@@ -1,7 +1,98 @@
 {% extends "network/layout.html" %}
 
 {% load static %}
+
 {% block title %} Jobs | Social Network {% endblock %}
+
+{% block head %}
+<style>
+
+            ul {
+              list-style: none;
+            }
+            .job-buttons {
+              display: flex;
+              justify-content: flex-end;
+              margin-top: 10px;
+            }
+
+            .job-buttons button {
+              margin-left: 10px;
+            }
+
+            .job-card {
+              background-color: white;
+              border-radius: 10px;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+              padding: 2rem;
+              margin-top: 20px;
+              margin-bottom: 2rem;
+              width: 96% !important;
+            }
+
+            .job-card h3 {
+              font-size: 2rem;
+              margin-bottom: 0.5rem;
+            }
+
+            .job-card a {
+              text-decoration: none;
+              color: black;
+            }
+
+            .job-card p.company-location {
+              font-size: 1.5rem;
+              margin-top: 1rem;
+              margin-bottom: 0.5rem;
+            }
+
+            .job-card:hover {
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.22);
+                transform: translateY(-1px);
+            }
+
+            #search {
+              border: 2px solid #ccc; /* Add a gray border */
+              border-radius: 4px; /* Rounded corners */
+              font-size: 16px; /* Set font size */
+              padding: 10px 20px; /* Add some padding */
+              width: 840px; /* Set a fixed width */
+              margin-top: 20px; /* Add a margin to the top */
+              margin-left: 32px; /* Add a margin to the left */
+            }
+
+            /* Style for the placeholder text */
+            ::placeholder {
+              color: #999; /* Add a light gray color */
+              font-style: italic; /* Make it italic */
+            }
+
+        </style>
+    <script>
+         function searchJobs() {
+            // Get the search query from the input field
+            var query = document.getElementById('search').value.toLowerCase();
+
+            // Get all the job cards in the list
+            var jobCards = document.querySelectorAll('#job-list li.job-card');
+
+            // Loop through each job card and hide/show it based on the search query
+            for (var i = 0; i < jobCards.length; i++) {
+                var jobCard = jobCards[i];
+                var jobTitle = jobCard.querySelector('h3').textContent.toLowerCase();
+                var jobCompany = jobCard.querySelector('.company-location').textContent.toLowerCase();
+
+                if (jobTitle.indexOf(query) !== -1 || jobCompany.indexOf(query) !== -1) {
+                    jobCard.style.display = 'block';
+                } else {
+                    jobCard.style.display = 'none';
+                }
+            }
+        }
+    </script>
+
+{% endblock %}
+
 {% block body %}
     <div class="main-div">
         <div class="left-div">
@@ -30,7 +121,7 @@
                                         <input type="text" id="search" placeholder="Search..." onkeyup="searchJobs()">
                                         <ul id="job-list" class="mx-auto">
                                                   {% for job_obj in job_list %}
-                                                        {% with job=job_obj.job profile_pic_url=job_obj.profile_pic_url %}
+                                                        {% with job=job_obj.job profile_pic_url=job_obj.profile_pic_url applied=job_obj.applied %}
                                                             <li class="job-card">
                                                                 {% if profile_pic_url %}
                                                                     <div class="small-profilepic" style="background-image: url({{ profile_pic_url }})"></div>
@@ -41,9 +132,13 @@
                                                                 <a href="{% url 'profile' job.company %}"><p class="company-location">@{{ job.company }} - {{ job.location }}</p></a>
                                                                 <p>Salary : {{ job.salary }}</p>
                                                                 <div class="job-buttons">
-                                                                    <a href="{% url 'jobapplication' job.jid %}">
-                                                                        <button class="btn btn-primary">Apply Now</button>
-                                                                    </a>
+                                                                    {% if applied %}
+                                                                        <button class="btn btn-secondary">Applied</button>
+                                                                    {% else %}
+                                                                        <a href="{% url 'jobapplication' job.jid %}">
+                                                                            <button class="btn btn-primary">Apply Now</button>
+                                                                        </a>
+                                                                    {% endif %}
                                                                 </div>
                                                             </li>
 

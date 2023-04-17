@@ -551,7 +551,13 @@ def userjobs(request):
             profile_pic_urls = user.profile_pic.url
         else:
             profile_pic_urls = None
-        job_list.append({"job": job, "profile_pic_url": profile_pic_urls})
+        applied = False
+        if request.user.is_authenticated:
+            # Check if the user has already applied to this job
+            applied = JobApplication.objects.filter(job_posting=job, email=request.user.email).exists()
+            job_list.append({"job": job, "profile_pic_url": profile_pic_urls, "applied": applied})
+        else:
+            job_list.append({"job": job, "profile_pic_url": profile_pic_urls})
     return render(request, 'network/userjobs.html', {
         "suggestions": suggestions,
         "job_list": job_list,
@@ -572,6 +578,7 @@ def jobapplication(request, jid):
     followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
     suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).exclude(
         username='admin').order_by("?")[:6]
+    resume_error = None
 
     job_posting = get_object_or_404(JobPosting, jid=jid)
 
@@ -584,19 +591,23 @@ def jobapplication(request, jid):
         job_posting_id = request.POST['job_posting']
         job_posting = get_object_or_404(JobPosting, jid=job_posting.jid)
 
-        job_application = JobApplication(
-            name=name,
-            email=email,
-            phone=phone,
-            resume=resume,
-            cover_letter=cover_letter,
-            job_posting=job_posting,
-        )
-        job_application.save()
+        if not resume.name.endswith('.pdf'):
+            resume_error='Invalid file type. Please upload a PDF file.'
+        else:
+            job_application = JobApplication(
+                name=name,
+                email=email,
+                phone=phone,
+                resume=resume,
+                cover_letter=cover_letter,
+                job_posting=job_posting,
+            )
+            job_application.save()
 
-        return redirect('userjobs')
+            return redirect('userjobs')
 
     return render(request, 'network/jobapplication.html', {
         "suggestions": suggestions,
-        "page": "userjobs"
+        "page": "userjobs",
+        "resume_error": resume_error
     })

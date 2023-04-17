@@ -97,6 +97,9 @@ class JobPosting(models.Model):
     def __str__(self):
         return self.title
 
+    def applications(self):
+        return self.applications.all()
+
 
 class JobApplication(models.Model):
     aid = models.AutoField(primary_key=True, unique=True)
@@ -113,4 +116,4 @@ class JobApplication(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name}'s application for {self.job_posting.title}"
+        return f"{self.name}'s application for {self.job_posting.title} at {self.job_posting.company}"

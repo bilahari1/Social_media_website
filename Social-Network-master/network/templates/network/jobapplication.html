@@ -1,7 +1,59 @@
 {% extends "network/layout.html" %}
 
 {% load static %}
+
 {% block title %} Job application | Social Network {% endblock %}
+{% block head %}
+<style>
+ .job-application {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              margin: 20px;
+              padding: 20px;
+              background-color: #f5f5f5;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+            }
+
+            .job-application label {
+              font-weight: bold;
+            }
+
+            .job-application__input,
+            .job-application__textarea {
+              padding: 5px;
+              margin-bottom: 10px;
+              border: 1px solid #ccc;
+              border-radius: 3px;
+              width: 100%;
+            }
+
+            .job-application__file-input {
+              margin-bottom: 10px;
+            }
+
+            .job-application__submit-button {
+              padding: 10px;
+              border-radius: 3px;
+              background-color: #007bff;
+              color: #fff;
+              border: none;
+              cursor: pointer;
+            }
+
+            .job-application__submit-button:hover {
+              background-color: #0069d9;
+            }
+
+            .job-application__submit-button:active {
+              background-color: #005cbf;
+            }
+            .jobh{
+                margin-left: 20px;
+            }
+</style>
+{% endblock %}
 {% block body %}
     <div class="main-div">
         <div class="left-div">
@@ -31,13 +83,16 @@
                           {% csrf_token %}
                           <input type="hidden" name="job_posting" value="{{ job_posting.jid }}">
                           <label for="name">Name:</label>
-                          <input class="job-application__input" type="text" name="name" required>
+                          <input class="job-application__input" type="text" name="name" value="{{ user.first_name }} {{ user.last_name }}" required>
                           <label for="email">Email:</label>
-                          <input class="job-application__input" type="email" name="email" required>
+                          <input class="job-application__input" type="email" name="email" value="{{ user.email }}" required>
                           <label for="phone">Phone:</label>
                           <input class="job-application__input" type="text" name="phone" required>
-                          <label for="resume">Resume:</label>
+                          <label for="resume">Resume(PDF):</label>
                           <input class="job-application__file-input" type="file" name="resume" required>
+                          {% if resume_error %}
+                            <small class="form-text" style="color: red">{{ resume_error }}</small>
+                          {% endif %}
                           <label for="cover_letter">Cover Letter:</label>
                           <textarea class="job-application__textarea" name="cover_letter" required></textarea>
                           <input class="job-application__submit-button" type="submit" value="Submit">

@@ -1,7 +1,75 @@
 {% extends "network/layout.html" %}
 
 {% load static %}
+
 {% block title %} Post Jobs | Social Network {% endblock %}
+
+{% block head %}
+        <style>
+
+            ul {
+              list-style: none;
+            }
+            .job-buttons {
+              display: flex;
+              justify-content: flex-end;
+              margin-top: 10px;
+            }
+
+            .job-buttons button {
+              margin-left: 10px;
+            }
+
+            .job-card {
+              background-color: white;
+              border-radius: 10px;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+              padding: 2rem;
+              margin-top: 20px;
+              margin-bottom: 2rem;
+              width: 96% !important;
+            }
+
+            .job-card h3 {
+              font-size: 2rem;
+              margin-bottom: 0.5rem;
+            }
+
+            .job-card a {
+              text-decoration: none;
+              color: black;
+            }
+
+            .job-card p.company-location {
+              font-size: 1.5rem;
+              margin-top: 1rem;
+              margin-bottom: 0.5rem;
+            }
+
+            .job-card:hover {
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.22);
+                transform: translateY(-1px);
+            }
+
+            #search {
+              border: 2px solid #ccc; /* Add a gray border */
+              border-radius: 4px; /* Rounded corners */
+              font-size: 16px; /* Set font size */
+              padding: 10px 20px; /* Add some padding */
+              width: 840px; /* Set a fixed width */
+              margin-top: 20px; /* Add a margin to the top */
+              margin-left: 32px; /* Add a margin to the left */
+            }
+
+            /* Style for the placeholder text */
+            ::placeholder {
+              color: #999; /* Add a light gray color */
+              font-style: italic; /* Make it italic */
+            }
+        </style>
+
+{% endblock %}
+
 {% block body %}
     <div class="main-div">
         <div class="left-div">
@@ -44,7 +112,7 @@
                                           <form method="POST" action="jobposting">
                                                   {% csrf_token %}
                                                   <h5 class="modal-title">Title</h5>
-                                                  <input type="text" name="title" class="form-control mb-3" required >
+                                                  <input type="text" id="name" name="title" class="form-control mb-3" required >
                                                   <h5 class="modal-title">Location</h5>
                                                   <input type="text" name="location" class="form-control mb-3" required >
                                                   <h5 class="modal-title">Description</h5>
@@ -138,23 +206,8 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
+                                                            <!-- Job applicants-->
 
-                                                                <h3>{{ job.title }}</h3>
-                                                                <p class="company-location">{{ job.company }} - {{ job.location }}</p>
-                                                                <h5>Description</h5>
-                                                                <p>{{ job.description }}</p><br>
-                                                                <h5>Requirements</h5>
-                                                                <p>{{ job.requirements }}</p><br>
-                                                                <h5>Responsibilities</h5>
-                                                                <p>{{ job.responsibilities }}</p><br>
-                                                                <h5>Qualifications</h5>
-                                                                <p>{{ job.qualifications }}</p><br>
-                                                                <h5>Responsibilities</h5>
-                                                                <p>{{ job.responsibilities }}</p><br>
-                                                                <h5>Website</h5>
-                                                                <p>{{ job.website }}</p><br>
-                                                                <h5>Salary</h5>
-                                                                <p>{{ job.salary }}</p>
 
                                                             </div>
                                                         </div>
