@@ -1,0 +1,58 @@
+{% extends "network/layout.html" %}
+
+{% load static %}
+{% block title %} Job application | Social Network {% endblock %}
+{% block body %}
+    <div class="main-div">
+        <div class="left-div">
+            <nav class="head heading">
+                {% if page == 'all_posts' %}
+                    <h3>All Posts</h3>
+                {% elif page == 'following' %}
+                    <h3>Following</h3>
+                {% elif page == 'userjobs' %}
+                    <h3>Jobs</h3>
+                {% elif page == 'saved' %}
+                    <h3>Saved</h3>
+                {% elif page == 'profile' %}
+                    <h3>Profile</h3>
+                {% else %}
+                    <h3>Explore</h3>
+                {% endif %}
+            </nav>
+            <div class="left-div-content">
+                <div class="posts-view">
+                    {% block profile %}
+                    {% endblock %}
+                    <div class="main-div-content">
+
+                        <h3 class="jobh">Job Application</h3>
+                        <form class="job-application" method="POST" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <input type="hidden" name="job_posting" value="{{ job_posting.jid }}">
+                          <label for="name">Name:</label>
+                          <input class="job-application__input" type="text" name="name" required>
+                          <label for="email">Email:</label>
+                          <input class="job-application__input" type="email" name="email" required>
+                          <label for="phone">Phone:</label>
+                          <input class="job-application__input" type="text" name="phone" required>
+                          <label for="resume">Resume:</label>
+                          <input class="job-application__file-input" type="file" name="resume" required>
+                          <label for="cover_letter">Cover Letter:</label>
+                          <textarea class="job-application__textarea" name="cover_letter" required></textarea>
+                          <input class="job-application__submit-button" type="submit" value="Submit">
+                        </form>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

@@ -21,66 +21,115 @@
         <script type="text/javascript" src="{% static 'network/layout.js' %}"></script>
         <style>
 
-        ul {
-          list-style: none;
-        }
-        .job-buttons {
-          display: flex;
-          justify-content: flex-end;
-          margin-top: 10px;
-        }
+            ul {
+              list-style: none;
+            }
+            .job-buttons {
+              display: flex;
+              justify-content: flex-end;
+              margin-top: 10px;
+            }
 
-        .job-buttons button {
-          margin-left: 10px;
-        }
+            .job-buttons button {
+              margin-left: 10px;
+            }
 
-        .job-card {
-          background-color: white;
-          border-radius: 10px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-          padding: 2rem;
-          margin-top: 20px;
-          margin-bottom: 2rem;
-          width: 96% !important;
-        }
+            .job-card {
+              background-color: white;
+              border-radius: 10px;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+              padding: 2rem;
+              margin-top: 20px;
+              margin-bottom: 2rem;
+              width: 96% !important;
+            }
 
-        .job-card h3 {
-          font-size: 2rem;
-          margin-bottom: 0.5rem;
-        }
+            .job-card h3 {
+              font-size: 2rem;
+              margin-bottom: 0.5rem;
+            }
 
-        .job-card a {
-          text-decoration: none;
-          color: black;
-        }
+            .job-card a {
+              text-decoration: none;
+              color: black;
+            }
 
-        .job-card p.company-location {
-          font-size: 1.5rem;
-          margin-top: 1rem;
-          margin-bottom: 0.5rem;
-        }
+            .job-card p.company-location {
+              font-size: 1.5rem;
+              margin-top: 1rem;
+              margin-bottom: 0.5rem;
+            }
 
-        .job-card:hover {
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.22);
-            transform: translateY(-1px);
-        }
-          #search {
-            border: 2px solid #ccc; /* Add a gray border */
-            border-radius: 4px; /* Rounded corners */
-            font-size: 16px; /* Set font size */
-            padding: 10px 20px; /* Add some padding */
-            width: 840px; /* Set a fixed width */
-            margin-top: 20px; /* Add a margin to the top */
-            margin-left: 32px; /* Add a margin to the left */
-          }
+            .job-card:hover {
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.22);
+                transform: translateY(-1px);
+            }
 
-          /* Style for the placeholder text */
-          ::placeholder {
-            color: #999; /* Add a light gray color */
-            font-style: italic; /* Make it italic */
-          }
+            #search {
+              border: 2px solid #ccc; /* Add a gray border */
+              border-radius: 4px; /* Rounded corners */
+              font-size: 16px; /* Set font size */
+              padding: 10px 20px; /* Add some padding */
+              width: 840px; /* Set a fixed width */
+              margin-top: 20px; /* Add a margin to the top */
+              margin-left: 32px; /* Add a margin to the left */
+            }
 
-    </style>
+            /* Style for the placeholder text */
+            ::placeholder {
+              color: #999; /* Add a light gray color */
+              font-style: italic; /* Make it italic */
+            }
+
+            .job-application {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              margin: 20px;
+              padding: 20px;
+              background-color: #f5f5f5;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+            }
+
+            .job-application label {
+              font-weight: bold;
+            }
+
+            .job-application__input,
+            .job-application__textarea {
+              padding: 5px;
+              margin-bottom: 10px;
+              border: 1px solid #ccc;
+              border-radius: 3px;
+              width: 100%;
+            }
+
+            .job-application__file-input {
+              margin-bottom: 10px;
+            }
+
+            .job-application__submit-button {
+              padding: 10px;
+              border-radius: 3px;
+              background-color: #007bff;
+              color: #fff;
+              border: none;
+              cursor: pointer;
+            }
+
+            .job-application__submit-button:hover {
+              background-color: #0069d9;
+            }
+
+            .job-application__submit-button:active {
+              background-color: #005cbf;
+            }
+            .jobh{
+                margin-left: 20px;
+            }
+
+        </style>
     <script>
          function searchJobs() {
             // Get the search query from the input field

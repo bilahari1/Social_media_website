@@ -1,7 +1,7 @@
 {% extends "network/layout.html" %}
 
 {% load static %}
-
+{% block title %} Jobs | Social Network {% endblock %}
 {% block body %}
     <div class="main-div">
         <div class="left-div">
@@ -41,7 +41,7 @@
                                                                 <a href="{% url 'profile' job.company %}"><p class="company-location">@{{ job.company }} - {{ job.location }}</p></a>
                                                                 <p>Salary : {{ job.salary }}</p>
                                                                 <div class="job-buttons">
-                                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#EditModal-{{ job.jid }}">
+                                                                    <a href="{% url 'jobapplication' job.jid %}">
                                                                         <button class="btn btn-primary">Apply Now</button>
                                                                     </a>
                                                                 </div>

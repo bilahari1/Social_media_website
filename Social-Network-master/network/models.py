@@ -98,12 +98,19 @@ class JobPosting(models.Model):
         return self.title
 
 
-# class JobApplication(models.Model):
-#     name = models.CharField(max_length=100)
-#     email = models.EmailField()
-#     phone = models.CharField(max_length=20)
-#     resume = models.FileField(upload_to='resumes/')
-#     cover_letter = models.TextField()
-#     job_posting = models.ForeignKey(JobPosting, on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+class JobApplication(models.Model):
+    aid = models.AutoField(primary_key=True, unique=True)
+    name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    resume = models.FileField(upload_to='resumes/')
+    cover_letter = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    job_posting = models.ForeignKey(
+        JobPosting,
+        on_delete=models.CASCADE,
+        related_name='applications',
+    )
+
+    def __str__(self):
+        return f"{self.name}'s application for {self.job_posting.title}"

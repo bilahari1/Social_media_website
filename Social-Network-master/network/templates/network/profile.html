@@ -1,7 +1,7 @@
 {% extends 'network/index.html' %}
 
 {% load static %}
-
+{% block title %} Profile | Social Network {% endblock %}
 {% block profile %}
     <div class="profile-view" data-user="{{username.username}}">
         <div class="cover-image" style="background-image: url(/media/{{username.cover}})"></div>

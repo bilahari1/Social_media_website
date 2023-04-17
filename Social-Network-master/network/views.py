@@ -558,3 +558,45 @@ def userjobs(request):
         "page": "userjobs",
     })
 
+@never_cache
+@login_required(login_url="/")
+def jobapplication(request, jid):
+
+    following_user = Follower.objects.filter(followers=request.user).values('user')
+    all_posts = Post.objects.filter(creater__in=following_user).order_by('-date_created')
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get('page')
+    if page_number is None:
+        page_number = 1
+    posts = paginator.get_page(page_number)
+    followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
+    suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).exclude(
+        username='admin').order_by("?")[:6]
+
+    job_posting = get_object_or_404(JobPosting, jid=jid)
+
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        resume = request.FILES['resume']
+        cover_letter = request.POST['cover_letter']
+        job_posting_id = request.POST['job_posting']
+        job_posting = get_object_or_404(JobPosting, jid=job_posting.jid)
+
+        job_application = JobApplication(
+            name=name,
+            email=email,
+            phone=phone,
+            resume=resume,
+            cover_letter=cover_letter,
+            job_posting=job_posting,
+        )
+        job_application.save()
+
+        return redirect('userjobs')
+
+    return render(request, 'network/jobapplication.html', {
+        "suggestions": suggestions,
+        "page": "userjobs"
+    })
