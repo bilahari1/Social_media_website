@@ -19,6 +19,7 @@ urlpatterns = [
     path("n/job_edit/<int:jid>", views.job_edit, name="job_edit"),
     path("n/userjobs", views.userjobs, name="userjobs"),
     path("n/jobapplication/<int:jid>", views.jobapplication, name="jobapplication"),
+    path("n/jobapplicants/<int:jid>", views.jobapplicants, name="jobapplicants"),
     path("n/saved", views.saved, name="saved"),
     path("n/createpost", views.create_post, name="createpost"),
     path("n/post/<int:id>/like", views.like_post, name="likepost"),

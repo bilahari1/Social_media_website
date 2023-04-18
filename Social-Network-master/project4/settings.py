@@ -121,6 +121,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'network/media')
 MEDIA_URL = '/media/'
 
+STRIPE_SECRET_KEY = 'sk_test_51My9o7SF3bcVwtOeMkgJuKMnZiN8SvuYdUG1sg9Wo62cJ87gBu4k7qnQhBAWC7FwYu87xr9VwmjNcXBhA4GdrurU00izcB9Adb'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51My9o7SF3bcVwtOe2ozKYnHGYWnFcnlYSSIGTAZQOqOTKkTO141CuyJEaCO26TxlXSHN4lho0zaZEjbBgSIQ5oCS00allyI2At'
+
 JAZZMIN_SETTINGS["show_ui_builder"] = True
 
 LOGOUT_REDIRECT_URL = '/'

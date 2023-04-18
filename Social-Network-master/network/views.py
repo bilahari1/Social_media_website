@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -6,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
+import stripe
 from django.core.paginator import Paginator
 import json
 from .models import *
@@ -611,3 +613,35 @@ def jobapplication(request, jid):
         "page": "userjobs",
         "resume_error": resume_error
     })
+
+@never_cache
+@login_required(login_url="/")
+def jobapplicants(request, jid):
+
+    following_user = Follower.objects.filter(followers=request.user).values('user')
+    all_posts = Post.objects.filter(creater__in=following_user).order_by('-date_created')
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get('page')
+    if page_number is None:
+        page_number = 1
+    posts = paginator.get_page(page_number)
+    followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
+    suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).exclude(
+        username='admin').order_by("?")[:6]
+
+    job_posting = JobPosting.objects.get(jid=jid)
+    job_applications = job_posting.applications.all()
+
+    for job_application in job_applications:
+        try:
+            user = User.objects.get(email=job_application.email)
+            job_application.user = user
+        except User.DoesNotExist:
+            pass
+
+    return render(request,'network/jobapplicants.html',{
+        "suggestions": suggestions,
+        "page": "postjobs",
+        "job_applications": job_applications
+    })
+

@@ -67,8 +67,8 @@
               font-style: italic; /* Make it italic */
             }
         </style>
-
 {% endblock %}
+
 
 {% block body %}
     <div class="main-div">
@@ -112,7 +112,7 @@
                                           <form method="POST" action="jobposting">
                                                   {% csrf_token %}
                                                   <h5 class="modal-title">Title</h5>
-                                                  <input type="text" id="name" name="title" class="form-control mb-3" required >
+                                                  <input type="text" name="title" class="form-control mb-3" required >
                                                   <h5 class="modal-title">Location</h5>
                                                   <input type="text" name="location" class="form-control mb-3" required >
                                                   <h5 class="modal-title">Description</h5>
@@ -144,7 +144,7 @@
                                                         {% if user.is_authenticated %}
                                                             <div class="small-profilepic" style="background-image: url(/media/{{user.profile_pic}})"></div>
                                                         {% endif %}
-                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#dmodal-{{ job.jid }}">
+                                                      <a href="{% url 'jobapplicants' job.pk %}">
                                                         <h3>{{ job.title }}</h3>
                                                       </a>
                                                       <p class="company-location">@{{ job.company }} - {{ job.location }}</p>
@@ -196,23 +196,6 @@
                                                 </div>
                                               </div>
                                             </div>
-
-                                            <!--- View modal --->
-                                            <div class="modal" tabindex="-1" id="dmodal-{{ job.jid }}">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title"><b>Job Details</b></h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                            <!-- Job applicants-->
-
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             {% endfor %}
                                         </ul>
                                     </div>

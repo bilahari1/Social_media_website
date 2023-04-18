@@ -89,7 +89,7 @@
                           <label for="phone">Phone:</label>
                           <input class="job-application__input" type="text" name="phone" required>
                           <label for="resume">Resume(PDF):</label>
-                          <input class="job-application__file-input" type="file" name="resume" required>
+                          <input class="job-application__file-input" type="file" name="resume" accept=".pdf" required>
                           {% if resume_error %}
                             <small class="form-text" style="color: red">{{ resume_error }}</small>
                           {% endif %}

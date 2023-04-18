@@ -1,0 +1,82 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block title %} Job applicants | Social Network {% endblock %}
+
+{% block head %}
+    <style>
+        ul.job-applications {
+            list-style: none;
+            padding-left: 0;
+        }
+        .job-application {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0px 0px 5px #ccc;
+            transition: all 0.3s ease-in-out;
+        }
+        .job-application:hover {
+            box-shadow: 0px 0px 10px #ccc;
+        }
+        .job-application p {
+            margin: 5px 0;
+        }
+        .job-application a {
+            color: #007bff;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+        .job-application a:hover {
+            color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="main-div">
+        <div class="left-div">
+            <nav class="head heading">
+                {% if page == 'all_posts' %}
+                    <h3>All Posts</h3>
+                {% elif page == 'following' %}
+                    <h3>Following</h3>
+                {% elif page == 'userjobs' %}
+                    <h3>Jobs</h3>
+                {% elif page == 'saved' %}
+                    <h3>Saved</h3>
+                {% elif page == 'profile' %}
+                    <h3>Profile</h3>
+                {% else %}
+                    <h3>Explore</h3>
+                {% endif %}
+            </nav>
+            <div class="left-div-content">
+                <div class="posts-view">
+                    {% block profile %}
+                    {% endblock %}
+                    <div class="main-div-content">
+                        <h3>Job Applicants</h3>
+                        <ul class="job-applications">
+                        {% for job_application in job_applications %}
+                            <li class="job-application">
+                                <p><strong>Name:</strong> <a href="{% url 'profile' job_application.user.username %}">{{ job_application.name }}</a></p>
+                                <p><strong>Email:</strong> {{ job_application.email }}</p>
+                                <p><strong>Phone:</strong> {{ job_application.phone }}</p>
+                                <p><strong>Cover letter:</strong> {{ job_application.cover_letter }}</p>
+                                <p><strong>Resume:</strong> <a href="{{ job_application.resume.url }}">View resume</a></p>
+                            </li>
+                        {% empty %}
+                            <p>No job applications found.</p>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
