@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
-import stripe
 from django.core.paginator import Paginator
 import json
 from .models import *
@@ -566,10 +565,10 @@ def userjobs(request):
         "page": "userjobs",
     })
 
+
 @never_cache
 @login_required(login_url="/")
 def jobapplication(request, jid):
-
     following_user = Follower.objects.filter(followers=request.user).values('user')
     all_posts = Post.objects.filter(creater__in=following_user).order_by('-date_created')
     paginator = Paginator(all_posts, 10)
@@ -594,7 +593,7 @@ def jobapplication(request, jid):
         job_posting = get_object_or_404(JobPosting, jid=job_posting.jid)
 
         if not resume.name.endswith('.pdf'):
-            resume_error='Invalid file type. Please upload a PDF file.'
+            resume_error = 'Invalid file type. Please upload a PDF file.'
         else:
             job_application = JobApplication(
                 name=name,
@@ -613,6 +612,7 @@ def jobapplication(request, jid):
         "page": "userjobs",
         "resume_error": resume_error
     })
+
 
 @never_cache
 @login_required(login_url="/")
@@ -639,7 +639,7 @@ def jobapplicants(request, jid):
         except User.DoesNotExist:
             pass
 
-    return render(request,'network/jobapplicants.html',{
+    return render(request, 'network/jobapplicants.html', {
         "suggestions": suggestions,
         "page": "postjobs",
         "job_applications": job_applications
