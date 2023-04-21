@@ -45,8 +45,8 @@
                     <h3>All Posts</h3>
                 {% elif page == 'following' %}
                     <h3>Following</h3>
-                {% elif page == 'userjobs' %}
-                    <h3>Jobs</h3>
+                {% elif page == 'postjobs' %}
+                    <h3>Job Applications</h3>
                 {% elif page == 'saved' %}
                     <h3>Saved</h3>
                 {% elif page == 'profile' %}
@@ -60,7 +60,6 @@
                     {% block profile %}
                     {% endblock %}
                     <div class="main-div-content">
-                        <h3>Job Applicants</h3>
                         <ul class="job-applications">
                         {% for job_application in job_applications %}
                             <li class="job-application">

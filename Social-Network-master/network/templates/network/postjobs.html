@@ -144,9 +144,7 @@
                                                         {% if user.is_authenticated %}
                                                             <div class="small-profilepic" style="background-image: url(/media/{{user.profile_pic}})"></div>
                                                         {% endif %}
-                                                      <a href="{% url 'jobapplicants' job.pk %}">
-                                                        <h3>{{ job.title }}</h3>
-                                                      </a>
+                                                      <h3>{{ job.title }}</h3>
                                                       <p class="company-location">@{{ job.company }} - {{ job.location }}</p>
                                                         <div class="job-buttons">
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#EditModal-{{ job.jid }}">
@@ -156,6 +154,9 @@
                                                               {% csrf_token %}
                                                               <button class="btn btn-danger" type="submit">Delete</button>
                                                             </form>
+                                                            <a href="{% url 'jobapplicants' job.pk %}">
+                                                                <button class="btn btn-success">View Applications</button>
+                                                            </a>
                                                         </div>
                                                     </li>
 

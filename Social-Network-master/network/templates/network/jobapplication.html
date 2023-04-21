@@ -5,11 +5,13 @@
 {% block title %} Job application | Social Network {% endblock %}
 {% block head %}
 <style>
- .job-application {
+            .job-application {
               display: flex;
               flex-direction: column;
               align-items: flex-start;
-              margin: 20px;
+              margin-top: 90px;
+              margin-left: 20px;
+              margin-right: 20px;
               padding: 20px;
               background-color: #f5f5f5;
               border: 1px solid #ccc;
@@ -27,6 +29,7 @@
               border: 1px solid #ccc;
               border-radius: 3px;
               width: 100%;
+              resize: none;
             }
 
             .job-application__file-input {
@@ -49,9 +52,6 @@
             .job-application__submit-button:active {
               background-color: #005cbf;
             }
-            .jobh{
-                margin-left: 20px;
-            }
 </style>
 {% endblock %}
 {% block body %}
@@ -63,7 +63,7 @@
                 {% elif page == 'following' %}
                     <h3>Following</h3>
                 {% elif page == 'userjobs' %}
-                    <h3>Jobs</h3>
+                    <h3>Job Application</h3>
                 {% elif page == 'saved' %}
                     <h3>Saved</h3>
                 {% elif page == 'profile' %}
@@ -77,8 +77,6 @@
                     {% block profile %}
                     {% endblock %}
                     <div class="main-div-content">
-
-                        <h3 class="jobh">Job Application</h3>
                         <form class="job-application" method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
                           <input type="hidden" name="job_posting" value="{{ job_posting.jid }}">
