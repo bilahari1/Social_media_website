@@ -34,6 +34,17 @@
         .job-application a:hover {
             color: #0056b3;
         }
+        .container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh; /* sets the height of the container to the full height of the viewport */
+        }
+
+        .message {
+          text-align: center; /* centers the text horizontally */
+          font-size: 24px;
+        }
     </style>
 {% endblock %}
 
@@ -70,8 +81,10 @@
                                 <p><strong>Resume:</strong> <a href="{{ job_application.resume.url }}">View resume</a></p>
                             </li>
                         {% empty %}
-                            <p>No job applications found.</p>
-                        {% endfor %}
+                            <div class="container">
+                                <p class="message"><strong>No job applications found.</strong></p>
+                            </div>
+                        {% endfor %},
                         </ul>
                     </div>
                 </div>

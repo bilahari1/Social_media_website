@@ -137,6 +137,7 @@ def cregister(request):
             user = User.objects.create_user(username, email, password, is_staff=True)
             if profile is not None:
                 user.profile_pic = profile
+                user.first_name = cname
             else:
                 user.profile_pic = "profile_pic/no_pic.png"
             user.cover = cover
