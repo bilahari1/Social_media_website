@@ -9,6 +9,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 import json
+import csv
 from .models import *
 
 User = get_user_model()
@@ -618,7 +619,6 @@ def jobapplication(request, jid):
 @never_cache
 @login_required(login_url="/")
 def jobapplicants(request, jid):
-
     following_user = Follower.objects.filter(followers=request.user).values('user')
     all_posts = Post.objects.filter(creater__in=following_user).order_by('-date_created')
     paginator = Paginator(all_posts, 10)
@@ -646,3 +646,23 @@ def jobapplicants(request, jid):
         "job_applications": job_applications
     })
 
+
+@never_cache
+@login_required(login_url="/")
+def download_csv(request, jid):
+
+    job_posting = JobPosting.objects.get(jid=jid)
+    job_applications = job_posting.applications.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="Job applications for {job_posting.title}.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Name', 'Email', 'Phone', 'Cover Letter', 'Resume URL'])
+
+    for job_application in job_applications:
+        writer.writerow(
+            [job_application.name, job_application.email, job_application.phone, job_application.cover_letter,
+             job_application.resume.url])
+
+    return response

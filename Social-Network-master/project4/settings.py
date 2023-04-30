@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'network',
-    'resume',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',

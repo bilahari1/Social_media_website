@@ -45,6 +45,11 @@
           text-align: center; /* centers the text horizontally */
           font-size: 24px;
         }
+        .box{
+            margin-top: 83px;
+            margin-bottom: 16px;
+            margin-left: 10px;
+        }
     </style>
 {% endblock %}
 
@@ -71,6 +76,13 @@
                     {% block profile %}
                     {% endblock %}
                     <div class="main-div-content">
+                        <div class="box">
+                            {% if job_applications %}
+                                {% with jid=job_applications.0.job_posting_id %}
+                                    <a href="{% url 'download_csv' jid %}" class="btn btn-primary">Download CSV</a>
+                                {% endwith %}
+                            {% endif %}
+                        </div>
                         <ul class="job-applications">
                         {% for job_application in job_applications %}
                             <li class="job-application">
@@ -84,7 +96,7 @@
                             <div class="container">
                                 <p class="message"><strong>No job applications found.</strong></p>
                             </div>
-                        {% endfor %},
+                        {% endfor %}
                         </ul>
                     </div>
                 </div>

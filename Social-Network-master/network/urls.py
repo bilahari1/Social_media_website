@@ -20,6 +20,7 @@ urlpatterns = [
     path("n/userjobs", views.userjobs, name="userjobs"),
     path("n/jobapplication/<int:jid>", views.jobapplication, name="jobapplication"),
     path("n/jobapplicants/<int:jid>", views.jobapplicants, name="jobapplicants"),
+    path('n/download_csv/<int:jid>', views.download_csv, name='download_csv'),
     path("n/saved", views.saved, name="saved"),
     path("n/createpost", views.create_post, name="createpost"),
     path("n/post/<int:id>/like", views.like_post, name="likepost"),
