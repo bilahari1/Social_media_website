@@ -1,4 +1,6 @@
+import numpy as np
 from django.conf import settings
+import cv2
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -86,6 +88,17 @@ def register(request):
             return render(request, "network/register.html", {
                 "message": "Passwords must match."
             })
+
+        # Check if profile pic has exactly one face
+        if profile is not None:
+            img = cv2.imdecode(np.fromstring(profile.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+            if len(faces) != 1:
+                return render(request, "network/register.html", {
+                    "msg": "Profile pic must have exactly one face."
+                })
 
         # Attempt to create new user
         try:
