@@ -1,5 +1,5 @@
-import numpy as np
 from django.conf import settings
+import numpy as np
 import cv2
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
