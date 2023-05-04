@@ -92,6 +92,7 @@ def register(request):
         # Check if profile pic has exactly one face
         if profile is not None:
             img = cv2.imdecode(np.fromstring(profile.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+            img = cv2.resize(img, (800, 800))
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
             faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)

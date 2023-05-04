@@ -24,34 +24,34 @@
             <div class="form-group">
                 <div class="form-row align-items-center">
                 <div class="col-sm-6 my-1">
-                    <input class="form-control inp fname" type="text" name="firstname" placeholder="First Name *" autocomplete="off" autofocus>
+                    <input class="form-control inp fname" type="text" name="firstname" placeholder="First Name *" required autocomplete="off" autofocus>
                     <span class="star small"></span>
                 </div>
                 <div class="col-sm-6 my-1">
-                    <input class="form-control inp lname" type="text" name="lastname" placeholder="Last Name *" autocomplete="off">
+                    <input class="form-control inp lname" type="text" name="lastname" placeholder="Last Name *" required autocomplete="off">
                     <span class="star small"></span>
                 </div>
             </div>
             </div>
             <div class="form-group">
-                <input class="form-control inp usrname" type="text" name="username" placeholder="Username *" autocomplete="off">
+                <input class="form-control inp usrname" type="text" name="username" placeholder="Username *" required autocomplete="off">
                 <span class="star small">{{message}}</span>
             </div>
             <div class="form-group">
-                <input class="form-control inp email" type="email" name="email" placeholder="Email Address *" autocomplete="off">
+                <input class="form-control inp email" type="email" name="email" placeholder="Email Address *" required autocomplete="off">
                 <span class="star small"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp pswd" type="password" name="password" placeholder="Password *" autocomplete="off">
+                <input class="form-control inp pswd" type="password" name="password" placeholder="Password *" required autocomplete="off">
                 <span class="star small"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Confirm Password *" autocomplete="off">
+                <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Confirm Password *" required autocomplete="off">
                 <span class="star small"></span>
             </div>
             <div class="form-group">
                 <div class="custom-file">
-                    <input type="file" name="profile" class="form-control custom-file-input" id="profile" accept="image/jpeg,image/png,image/webp,image/gif" data-focusable="true" aria-describedby="inputGroupFileAddon01">
+                    <input type="file" name="profile" class="form-control custom-file-input" id="profile" accept="image/jpeg,image/png,image/webp,image/gif" data-focusable="true" aria-describedby="inputGroupFileAddon01" required >
                     <label class="custom-file-label" for="profile"><span style="color: #6c757d;">Choose profile picture</span></label>
                     <span class="star small">{{msg}}</span>
                 </div>
@@ -66,7 +66,7 @@
 
 
             <center>
-                <input class="btn btn-primary" type="submit" value="Sign Up" style="margin-top: 10px; width: 95%;" disabled>
+                <input class="btn btn-primary" type="submit" value="Sign Up" style="margin-top: 10px; width: 95%;">
             </center>
         </form>
     
