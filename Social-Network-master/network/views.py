@@ -94,11 +94,15 @@ def register(request):
             img = cv2.imdecode(np.fromstring(profile.read(), np.uint8), cv2.IMREAD_UNCHANGED)
             img = cv2.resize(img, (800, 800))
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+            face_cascade = cv2.CascadeClassifier("network/haarcascade_frontalface_alt.xml")
             faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-            if len(faces) != 1:
+            if len(faces) < 1:
                 return render(request, "network/register.html", {
-                    "msg": "Profile pic must have exactly one face."
+                    "msg": "No faces detected"
+                })
+            elif len(faces) > 1:
+                return render(request, "network/register.html", {
+                    "msg": "More than one face detecetd"
                 })
 
         # Attempt to create new user
