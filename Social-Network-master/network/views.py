@@ -98,11 +98,12 @@ def register(request):
             faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
             if len(faces) < 1:
                 return render(request, "network/register.html", {
-                    "msg": "No faces detected"
+                    "msg": "No faces detected. Upload a photo with a human face or try uploading a clear photo with "
+                           "better lighting."
                 })
             elif len(faces) > 1:
                 return render(request, "network/register.html", {
-                    "msg": "More than one face detecetd"
+                    "msg": "More than one face detecetd. (Upload a photo with only one person in it.)"
                 })
 
         # Attempt to create new user
@@ -668,7 +669,6 @@ def jobapplicants(request, jid):
 @never_cache
 @login_required(login_url="/")
 def download_csv(request, jid):
-
     job_posting = JobPosting.objects.get(jid=jid)
     job_applications = job_posting.applications.all()
 
