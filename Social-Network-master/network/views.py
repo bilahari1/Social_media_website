@@ -684,3 +684,13 @@ def download_csv(request, jid):
              job_application.resume.url])
 
     return response
+
+
+def search(request):
+    return render(request, 'network/user_search.html', {
+        "page": "search",
+    })
+
+
+def payment(request):
+    return render(request, 'network/payment.html')

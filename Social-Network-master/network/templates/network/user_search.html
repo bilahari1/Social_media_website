@@ -1,0 +1,66 @@
+{% extends "network/layout.html" %}
+
+{% load static %}
+
+{% block title %} Job application | Social Network {% endblock %}
+{% block head %}
+<style>
+    #search-bar {
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 10px 20px;
+    width: 840px;
+    margin-top: 20px;
+    margin-left: 32px;
+  }
+
+</style>
+<script>
+
+</script>
+{% endblock %}
+{% block body %}
+    <div class="main-div">
+        <div class="left-div">
+            <nav class="head heading">
+                {% if page == 'all_posts' %}
+                    <h3>All Posts</h3>
+                {% elif page == 'following' %}
+                    <h3>Following</h3>
+                {% elif page == 'search' %}
+                    <h3>Search</h3>
+                {% elif page == 'saved' %}
+                    <h3>Saved</h3>
+                {% elif page == 'profile' %}
+                    <h3>Profile</h3>
+                {% else %}
+                    <h3>Explore</h3>
+                {% endif %}
+            </nav>
+            <div class="left-div-content">
+                <div class="posts-view">
+                    {% block profile %}
+                    {% endblock %}
+                    <div class="main-div-content">
+                        <form method="get" action="{% url 'search' %}">
+                            <input type="text" id="search-bar" name="query" placeholder="Search..."/>
+                            <button type="submit">Search</button>
+                        </form>
+                        {% if results %}
+                            <h4>Search Results</h4>
+                            {% for user in results %}
+                                <p>{{ user.username }}</p>
+                            {% empty %}
+                                <p>No results found.</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
