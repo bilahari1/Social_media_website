@@ -7,10 +7,83 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'network/payment.css' %}">
+    <link rel="shortcut icon" href="{% static 'network/Images/favicon.ico' %}">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        button {
+         width: 150px;
+         height: 50px;
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         background: green;
+         border: none;
+         border-radius: 5px;
+         box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+         background: #28a745;
+        }
+
+        button, button span {
+         transition: 200ms;
+        }
+
+        button .text {
+         transform: translateX(35px);
+         color: white;
+         font-weight: bold;
+        }
+
+        button .icon {
+         position: absolute;
+         border-left: 1px solid #0b932b;
+         transform: translateX(110px);
+         height: 40px;
+         width: 40px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+        }
+
+        button svg {
+         width: 15px;
+         fill: #eee;
+        }
+
+        button:hover {
+         background: #09c72f;
+        }
+
+        button:hover .text {
+         color: transparent;
+        }
+
+        button:hover .icon {
+         width: 150px;
+         border-left: none;
+         transform: translateX(0);
+        }
+
+        button:focus {
+         outline: none;
+        }
+
+        button:active .icon svg {
+         transform: scale(0.8);
+        }
+        .logo{
+            margin-left: 12px;
+            margin-top: 12px;
+        }
+    </style>
 </head>
 <body>
+                              <img src="{% static 'network/Images/logo.png' %}" height="31px" class="logo">
                               <div class="demo">
                                     <div class="container">
+                                        <a href="{% url 'index' %}" style="text-decoration: none;">
+                                            <button class="noselect"><span class="text">Cancel</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+                                        </a>
                                         <div class="row text-center">
                                             <h1 class="heading-title">Pricing Table</h1>
                                         </div>
@@ -24,8 +97,8 @@
                                                         </span>
                                                     </div>
                                                     <div class="pricing-plans">
-                                                        <span class="price-value"><i class="fa fa-usd"></i><span>10</span></span>
-                                                        <span class="subtitle">Lorem ipsum dolor</span>
+                                                        <span class="price-value"><span>₹200</span></span>
+                                                        <span class="subtitle">1 Month</span>
                                                     </div>
                                                     <div class="pricingContent">
                                                         <ul>
@@ -38,7 +111,7 @@
                                                     </div><!-- /  CONTENT BOX-->
 
                                                     <div class="pricingTable-sign-up"><!-- BUTTON BOX-->
-                                                        <a href="#" class="btn btn-block btn-default">buy now</a>
+                                                        <a href="#" id="razorpay-link1" class="btn btn-block btn-default">buy now</a>
                                                     </div><!-- BUTTON BOX-->
                                                 </div>
                                             </div>
@@ -51,8 +124,8 @@
                                                         </span>
                                                     </div>
                                                     <div class="pricing-plans">
-                                                        <span class="price-value"><i class="fa fa-usd"></i><span>20</span></span>
-                                                        <span class="subtitle">Lorem ipsum dolor</span>
+                                                        <span class="price-value"><span>₹1200</span></span>
+                                                        <span class="subtitle">6 Month</span>
                                                     </div>
                                                     <div class="pricingContent">
                                                         <ul>
@@ -65,7 +138,7 @@
                                                     </div><!-- /  CONTENT BOX-->
 
                                                     <div class="pricingTable-sign-up"><!-- BUTTON BOX-->
-                                                        <a href="#" class="btn btn-block btn-default">buy now</a>
+                                                        <a href="#" id="razorpay-link2" class="btn btn-block btn-default">buy now</a>
                                                     </div><!-- BUTTON BOX-->
                                                 </div>
                                             </div>
@@ -78,8 +151,8 @@
                                                         </span>
                                                     </div>
                                                     <div class="pricing-plans">
-                                                        <span class="price-value"><i class="fa fa-usd"></i><span>30</span></span>
-                                                        <span class="subtitle">Lorem ipsum dolor</span>
+                                                        <span class="price-value"><span>₹2400</span></span>
+                                                        <span class="subtitle">12 Month</span>
                                                     </div>
                                                     <div class="pricingContent">
                                                         <ul>
@@ -92,12 +165,93 @@
                                                     </div><!-- /  CONTENT BOX-->
 
                                                     <div class="pricingTable-sign-up"><!-- BUTTON BOX-->
-                                                        <a href="#" class="btn btn-block btn-default">buy now</a>
+                                                        <a href="#" id="razorpay-link3" class="btn btn-block btn-default">buy now</a>
                                                     </div><!-- BUTTON BOX-->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+    <script>
+        document.getElementById('razorpay-link1').onclick = function(e) {
+            e.preventDefault();
+            var options = {
+                "key": "rzp_test_V76tEmQszdzu8t",
+                "amount": "20000",
+                "name": "Network",
+                "description": "Payment for premium subscription",
+                "image": "{% static 'network/Images/logo_icon.png' %}",
+                "handler": function (response){
+                    // handle the response
+                },
+                "prefill": {
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "contact": "9999999999"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#28a745"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+        document.getElementById('razorpay-link2').onclick = function(e) {
+            e.preventDefault();
+            var options = {
+                "key": "rzp_test_V76tEmQszdzu8t",
+                "amount": "120000",
+                "name": "Network",
+                "description": "Payment for premium subscription",
+                "image": "{% static 'network/Images/logo_icon.png' %}",
+                "handler": function (response){
+                    // handle the response
+                },
+                "prefill": {
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "contact": "9999999999"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#28a745"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+        document.getElementById('razorpay-link3').onclick = function(e) {
+            e.preventDefault();
+            var options = {
+                "key": "rzp_test_V76tEmQszdzu8t",
+                "amount": "240000",
+                "name": "Network",
+                "description": "Payment for premium subscription",
+                "image": "{% static 'network/Images/logo_icon.png' %}",
+                "handler": function (response){
+                    // handle the response
+                },
+                "prefill": {
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "contact": "9999999999"
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#28a745"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+    </script>
 </body>
 </html>

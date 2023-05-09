@@ -1,3 +1,4 @@
+import razorpay
 from django.conf import settings
 import numpy as np
 import cv2
@@ -692,5 +693,9 @@ def search(request):
     })
 
 
+# RAZORPAY_API_KEY = "rzp_test_V76tEmQszdzu8t"
+# RAZORPAY_API_SECRET = "FmoMelanxKZZbIlXs9lQO1Eg"
+
+@csrf_exempt
 def payment(request):
-    return render(request, 'network/payment.html')
+    return render(request, "network/payment.html")
