@@ -568,6 +568,10 @@ def userjobs(request):
         username='admin').order_by("?")[:6]
     jobs = JobPosting.objects.all().order_by('-created_at')
     job_list = []
+    try:
+        active_payment = Payment.objects.filter(user=request.user, has_expired=False).latest('expiry_date')
+    except Payment.DoesNotExist:
+        active_payment = 0
     for job in jobs:
         cmpny = job.company
         user = User.objects.filter(username=cmpny).first()
@@ -586,6 +590,7 @@ def userjobs(request):
         "suggestions": suggestions,
         "job_list": job_list,
         "page": "userjobs",
+        "active_payment": active_payment,
     })
 
 
@@ -703,7 +708,16 @@ def search(request):
 @login_required(login_url="/")
 @csrf_exempt
 def payment(request):
+    active_payment = request.user.payment_set.filter(has_expired=False).first()
+    if active_payment:
+        payments = request.user.payment_set.all()
+        return render(request, 'network/payment_details.html', {
+            'page': 'payment',
+            'payments': payments
+        })
+
     return render(request, "network/payment.html")
+
 
 @never_cache
 @login_required(login_url="/")

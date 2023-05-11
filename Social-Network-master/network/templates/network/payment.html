@@ -235,7 +235,23 @@
           description: "Payment for basic subscription",
           image: "{% static 'network/Images/logo_icon.png' %}",
           handler: function (response) {
-            // handle the response
+              var payment_id = response.razorpay_payment_id;
+              $.ajax({
+                  type: "POST",
+                  url: "{% url 'confirm_payment' %}",
+                  data: {
+                      payment_id: payment_id,
+                      type: 'Basic',
+                      csrfmiddlewaretoken: "{{ csrf_token }}",
+                  },
+                  success: function (data) {
+                      console.log("AJAX request successful: ", data);
+                      window.location.href = "{% url 'userjobs' %}";
+                  },
+                  error: function (xhr, textStatus, errorThrown) {
+                      console.log("AJAX request error: ", errorThrown);
+                  },
+              });
           },
           prefill: {
             name: name,
@@ -265,9 +281,7 @@
           description: "Payment for standard subscription",
           image: "{% static 'network/Images/logo_icon.png' %}",
           handler: function (response) {
-              // handle the response
               var payment_id = response.razorpay_payment_id;
-              // Make an AJAX request to Django view to confirm payment
               $.ajax({
                   type: "POST",
                   url: "{% url 'confirm_payment' %}",
@@ -278,6 +292,7 @@
                   },
                   success: function (data) {
                       console.log("AJAX request successful: ", data);
+                      window.location.href = "{% url 'userjobs' %}";
                   },
                   error: function (xhr, textStatus, errorThrown) {
                       console.log("AJAX request error: ", errorThrown);
@@ -312,7 +327,23 @@
             description: "Payment for premium subscription",
             image: "{% static 'network/Images/logo_icon.png' %}",
             handler: function (response) {
-                // handle the response
+                var payment_id = response.razorpay_payment_id;
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'confirm_payment' %}",
+                    data: {
+                        payment_id: payment_id,
+                        type: 'Premium',
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                    },
+                    success: function (data) {
+                        console.log("AJAX request successful: ", data);
+                        window.location.href = "{% url 'userjobs' %}";
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log("AJAX request error: ", errorThrown);
+                    },
+                });
             },
             prefill: {
                 name: name,

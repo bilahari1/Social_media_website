@@ -1,0 +1,37 @@
+{% extends "network/layout.html" %}
+
+{% load static %}
+
+{% block title %} Payment details | Network {% endblock %}
+
+{% block body %}
+    <div class="main-div">
+        <div class="left-div">
+            <nav class="head heading">
+                <h3>Payment Details</h3>
+            </nav>
+            <div class="left-div-content">
+                <div class="posts-view">
+                    <div class="main-div-content">
+                        <ul>
+                            {% for payment in payments %}
+                                <li>
+                                    Subscription: {{ payment.subscription.subscription_type }}<br>
+                                    Amount: {{ payment.amount }}<br>
+                                    Duration: {{ payment.subscription.duration_in_days }} days<br>
+                                    Purchased on: {{ payment.payment_date }}<br>
+                                    Ends on: {{ payment.expiry_date }}<br>
+                                    {% if payment.has_expired %}
+                                    Plan expired<br>
+                                    {% endif %}
+                                </li>
+                            {% empty %}
+                                <li>No payment details found.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

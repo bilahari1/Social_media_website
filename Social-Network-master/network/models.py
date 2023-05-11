@@ -138,7 +138,7 @@ class Payment(models.Model):
     has_expired = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.amount} payment for {self.subscription.subscription_type} subscription"
+        return f"{self.user.first_name}'s payment for {self.subscription.subscription_type} subscription"
 
     def save(self, *args, **kwargs):
         self.expiry_date = self.payment_date + timezone.timedelta(days=self.subscription.duration_in_days)

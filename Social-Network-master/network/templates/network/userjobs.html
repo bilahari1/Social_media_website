@@ -176,12 +176,18 @@
                   <a href="#" data-bs-toggle="modal" data-bs-target="#Viewmodal-{{ job.jid }}">
                     <button class="btn btn-success">View Details</button>
                   </a>
-                  {% if applied %}
-                  <button class="btn btn-secondary">Applied</button>
+                  {% if active_payment %}
+                      {% if applied %}
+                          <button class="btn btn-secondary">Applied</button>
+                      {% else %}
+                          <a href="{% url 'jobapplication' job.jid %}">
+                              <button class="btn btn-success">Apply Now</button>
+                          </a>
+                      {% endif %}
                   {% else %}
-                  <a href="{% url 'jobapplication' job.jid %}">
-                    <button class="btn btn-success">Apply Now</button>
-                  </a>
+                      <a href="{% url 'payment' %}">
+                          <button class="btn btn-primary">Buy Plan to apply</button>
+                      </a>
                   {% endif %}
                 </div>
               </li>
