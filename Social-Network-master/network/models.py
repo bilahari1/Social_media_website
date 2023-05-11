@@ -117,3 +117,29 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.name}'s application for {self.job_posting.title} at {self.job_posting.company}"
+
+
+class Subscription(models.Model):
+    subscription_type = models.CharField(max_length=20)
+    duration_in_days = models.IntegerField()
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.subscription_type} subscription"
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    payment_id = models.CharField(max_length=100)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    expiry_date = models.DateTimeField()
+    has_expired = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.amount} payment for {self.subscription.subscription_type} subscription"
+
+    def save(self, *args, **kwargs):
+        self.expiry_date = self.payment_date + timezone.timedelta(days=self.subscription.duration_in_days)
+        super(Payment, self).save(*args, **kwargs)

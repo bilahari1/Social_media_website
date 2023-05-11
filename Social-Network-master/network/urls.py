@@ -19,6 +19,7 @@ urlpatterns = [
     path("n/job_edit/<int:jid>", views.job_edit, name="job_edit"),
     path("n/userjobs", views.userjobs, name="userjobs"),
     path("n/payment", views.payment, name="payment"),
+    path("n/confirm_payment", views.confirm_payment, name="confirm_payment"),
     path("n/jobapplication/<int:jid>", views.jobapplication, name="jobapplication"),
     path("n/jobapplicants/<int:jid>", views.jobapplicants, name="jobapplicants"),
     path('n/download_csv/<int:jid>', views.download_csv, name='download_csv'),

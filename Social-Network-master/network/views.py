@@ -2,6 +2,7 @@ import razorpay
 from django.conf import settings
 import numpy as np
 import cv2
+from datetime import datetime, timedelta
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -687,6 +688,8 @@ def download_csv(request, jid):
     return response
 
 
+@never_cache
+@login_required(login_url="/")
 def search(request):
     return render(request, 'network/user_search.html', {
         "page": "search",
@@ -696,6 +699,36 @@ def search(request):
 # RAZORPAY_API_KEY = "rzp_test_V76tEmQszdzu8t"
 # RAZORPAY_API_SECRET = "FmoMelanxKZZbIlXs9lQO1Eg"
 
+@never_cache
+@login_required(login_url="/")
 @csrf_exempt
 def payment(request):
     return render(request, "network/payment.html")
+
+@never_cache
+@login_required(login_url="/")
+@csrf_exempt
+def confirm_payment(request):
+    if request.method == 'POST':
+        razorpay_payment_id = request.POST.get('payment_id')
+        type = request.POST.get('type')
+        razorpay_client = razorpay.Client(auth=("rzp_test_V76tEmQszdzu8t", "FmoMelanxKZZbIlXs9lQO1Eg"))
+        payment = razorpay_client.payment.fetch(razorpay_payment_id)
+        subscription = get_object_or_404(Subscription, subscription_type=type)
+        payment_obj = Payment.objects.create(
+            user=request.user,
+            subscription=subscription,
+            amount=float(subscription.amount),
+            payment_id=razorpay_payment_id,
+            payment_date=datetime.now(),
+            expiry_date=datetime.now() + timedelta(days=subscription.duration_in_days),
+        )
+
+        subscription.has_active_payment = True
+        subscription.save()
+        if payment['status'] == 'authorized':
+            # Payment successful
+            return JsonResponse({'status': 'success'})
+        else:
+            # Payment failed
+            return JsonResponse({'status': 'failure'})

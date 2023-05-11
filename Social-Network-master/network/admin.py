@@ -9,6 +9,8 @@ admin.site.register(Post)
 admin.site.register(Comment)
 admin.site.register(Follower)
 admin.site.register(JobApplication)
+admin.site.register(Subscription)
+admin.site.register(Payment)
 # admin.site.register(Like)
 # admin.site.register(Saved)
 
