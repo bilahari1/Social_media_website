@@ -1,6 +1,8 @@
 import razorpay
 from django.conf import settings
 import numpy as np
+import pytz
+from django.utils import timezone
 import cv2
 from datetime import datetime, timedelta
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -52,6 +54,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
+            response = check_payment_expiry(request)
             if user.is_staff:
                 if user.is_superuser:
                     return HttpResponseRedirect(reverse("admin:index"))
@@ -750,3 +753,19 @@ def confirm_payment(request):
         else:
             # Payment failed
             return JsonResponse({'status': 'failure'})
+
+
+def check_payment_expiry(request):
+    user = request.user
+    payments = Payment.objects.filter(user=user)
+
+    if payments:
+        most_recent_payment = payments.latest('payment_date')
+        today = timezone.now().astimezone(pytz.timezone('Asia/Kolkata'))
+        if most_recent_payment.expiry_date < today:
+            most_recent_payment.has_expired = True
+            most_recent_payment.save()
+            return 'payment expired'
+        return 'payment not expired'
+
+    return 'no payments'
