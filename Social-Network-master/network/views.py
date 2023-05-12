@@ -708,11 +708,15 @@ def search(request):
 @login_required(login_url="/")
 @csrf_exempt
 def payment(request):
+    followings = Follower.objects.filter(followers=request.user).values_list('user', flat=True)
+    suggestions = User.objects.exclude(pk__in=followings).exclude(username=request.user.username).exclude(
+        username='admin').order_by("?")[:6]
     active_payment = request.user.payment_set.filter(has_expired=False).first()
     if active_payment:
         payments = request.user.payment_set.all()
         return render(request, 'network/payment_details.html', {
             'page': 'payment',
+            "suggestions": suggestions,
             'payments': payments
         })
 

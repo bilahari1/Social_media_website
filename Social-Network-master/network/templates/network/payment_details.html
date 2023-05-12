@@ -4,6 +4,64 @@
 
 {% block title %} Payment details | Network {% endblock %}
 
+{% block head %}
+<style>
+    .main-div-content ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-div-content li {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-div-content li:last-child {
+        margin-bottom: 0;
+    }
+
+    .main-div-content li h4 {
+        margin-top: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .main-div-content li p {
+        margin: 10px 0 0;
+        font-size: 1rem;
+        color: #666;
+    }
+
+    .main-div-content li span {
+        font-size: 0.9rem;
+        color: #999;
+    }
+
+    /* Additional styling for the main content div */
+    .main-div-content {
+        margin-bottom: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+        margin-top: 90px;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    /* Styling for "Plan expired" text */
+    .main-div-content li span.expired {
+        color: #ff0000;
+    }
+
+</style>
+{% endblock %}
+
 {% block body %}
     <div class="main-div">
         <div class="left-div">
@@ -16,13 +74,13 @@
                         <ul>
                             {% for payment in payments %}
                                 <li>
-                                    Subscription: {{ payment.subscription.subscription_type }}<br>
-                                    Amount: {{ payment.amount }}<br>
-                                    Duration: {{ payment.subscription.duration_in_days }} days<br>
-                                    Purchased on: {{ payment.payment_date }}<br>
-                                    Ends on: {{ payment.expiry_date }}<br>
+                                    <b>Subscription:</b> {{ payment.subscription.subscription_type }}<br>
+                                    <b>Amount:</b> ₹{{ payment.amount }}<br>
+                                    <b>Duration:</b> {{ payment.subscription.duration_in_days }} days<br>
+                                    <b>Purchased on:</b> {{ payment.payment_date }}<br>
+                                    <b>Ends on:</b> {{ payment.expiry_date }}<br>
                                     {% if payment.has_expired %}
-                                    Plan expired<br>
+                                    <span class="expired"><b>Plan expired</b></span><br>
                                     {% endif %}
                                 </li>
                             {% empty %}
