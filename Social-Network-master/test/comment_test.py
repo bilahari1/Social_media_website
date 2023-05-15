@@ -30,4 +30,11 @@ text_area.send_keys("Awsome")
 time.sleep(2)
 press_enter()
 time.sleep(2)
-print("Comment Added")
+curl = driver.current_url
+url = 'http://127.0.0.1:8000/'
+if curl == url:
+    print("Comment Added Successfully")
+else:
+    print("Test failed")
+driver.quit()
+

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript" src="{% static 'network/signup.js' %}"></script>
+<!--    <script type="text/javascript" src="{% static 'network/signup.js' %}"></script>-->
 {% endblock %}
 
 {% block body %}
@@ -24,30 +24,30 @@
             <div class="form-group">
                 <div class="form-row align-items-center">
                 <div class="col-sm-6 my-1">
-                    <input class="form-control inp fname" type="text" name="firstname" placeholder="First Name *" required autocomplete="off" autofocus>
-                    <span class="star small"></span>
+                    <input class="form-control inp fname" type="text" name="firstname" placeholder="First Name *" required autocomplete="off" onkeyup="validateFirstName()" autofocus>
+                    <span class="star small" id="error_firstname"></span>
                 </div>
                 <div class="col-sm-6 my-1">
-                    <input class="form-control inp lname" type="text" name="lastname" placeholder="Last Name *" required autocomplete="off">
-                    <span class="star small"></span>
+                    <input class="form-control inp lname" type="text" name="lastname" placeholder="Last Name *" required onkeyup="validateLastName()" autocomplete="off">
+                    <span class="star small" id="error_lastname"></span>
                 </div>
             </div>
             </div>
             <div class="form-group">
-                <input class="form-control inp usrname" type="text" name="username" placeholder="Username *" required autocomplete="off">
-                <span class="star small">{{message}}</span>
+                <input class="form-control inp usrname" type="text" name="username" placeholder="Username *" required onkeyup="validateUsername()" autocomplete="off">
+                <span class="star small" id="error_username">{{message}}</span>
             </div>
             <div class="form-group">
-                <input class="form-control inp email" type="email" name="email" placeholder="Email Address *" required autocomplete="off">
-                <span class="star small"></span>
+                <input class="form-control inp email" type="email" name="email" placeholder="Email Address *" required onkeyup="validateEmail()" autocomplete="off">
+                <span class="star small" id="error_email"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp pswd" type="password" name="password" placeholder="Password *" required autocomplete="off">
-                <span class="star small"></span>
+                <input class="form-control inp pswd" type="password" name="password" placeholder="Password *" onkeyup="validatePassword()" required autocomplete="off">
+                <span class="star small" id="error_password"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Confirm Password *" required autocomplete="off">
-                <span class="star small"></span>
+                <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Confirm Password *" onkeyup="validateConfirmation()" required autocomplete="off">
+                <span class="star small" id="error_confirmation"></span>
             </div>
             <div class="form-group">
                 <div class="custom-file">
@@ -76,4 +76,97 @@
             </center>
         </div><br><br>
     </div>
+<script>
+    function validateFirstName() {
+    var firstNameInput = document.querySelector('.fname');
+    var errorFirstName = document.querySelector('#error_firstname');
+
+    var regex = /^[a-zA-Z]+$/;
+    if (!regex.test(firstNameInput.value)) {
+        errorFirstName.textContent = 'Please enter a valid first name';
+    } else {
+        errorFirstName.textContent = '';
+    }
+}
+
+// Function to validate the last name field
+function validateLastName() {
+    var lastNameInput = document.querySelector('.lname');
+    var errorLastName = document.querySelector('#error_lastname');
+
+    var regex = /^[a-zA-Z]+$/;
+    if (!regex.test(lastNameInput.value)) {
+        errorLastName.textContent = 'Please enter a valid last name';
+    } else {
+        errorLastName.textContent = '';
+    }
+}
+
+// Function to validate the username field
+function validateUsername() {
+    var usernameInput = document.querySelector('.usrname');
+    var errorUsername = document.querySelector('#error_username');
+
+    var regex = /^[a-zA-Z0-9_]+$/;
+    if (!regex.test(usernameInput.value)) {
+        errorUsername.textContent = 'Please enter a valid username';
+    } else {
+        errorUsername.textContent = '';
+    }
+}
+
+// Function to validate the email field
+function validateEmail() {
+    var emailInput = document.querySelector('.email');
+    var errorEmail = document.querySelector('#error_email');
+
+    var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(emailInput.value)) {
+        errorEmail.textContent = 'Please enter a valid email address';
+    } else {
+        errorEmail.textContent = '';
+    }
+}
+
+// Function to validate the password field
+function validatePassword() {
+    var passwordInput = document.querySelector('.pswd');
+    var errorPassword = document.querySelector('#error_password');
+
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])[A-Za-z\d@#$%^&+=]{8,}$/;
+    if (!regex.test(passwordInput.value)) {
+        errorPassword.textContent = 'Password must contain 8 characters, combination of uppercase, lowercase and special characters';
+    } else {
+        errorPassword.textContent = '';
+    }
+}
+
+// Function to validate the password confirmation field
+function validateConfirmation() {
+    var confirmationInput = document.querySelector('.cpswd');
+    var errorConfirmation = document.querySelector('#error_confirmation');
+    var passwordInput = document.querySelector('.pswd');
+
+    if (confirmationInput.value !== passwordInput.value) {
+        errorConfirmation.textContent = 'Passwords do not match';
+    } else {
+        errorConfirmation.textContent = '';
+    }
+}
+    document.querySelectorAll('.custom-file-input').forEach(element => {
+        element.addEventListener("change", event => {
+            if(event.target.files[0]) {
+                event.target.parentElement.querySelector('.custom-file-label').innerText = event.target.files[0].name;
+            }
+            else {
+                if(event.target.id === 'profile') {
+                    event.target.parentElement.querySelector('.custom-file-label').innerHTML = `<span style="color: #6c757d;">Choose profile picture<span>`;
+                }
+                else if(event.target.id === 'cover') {
+                    event.target.parentElement.querySelector('.custom-file-label').innerHTML = `<span style="color: #6c757d;">Choose cover picture<span>`;
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

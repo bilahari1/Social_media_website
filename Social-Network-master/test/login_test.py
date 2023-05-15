@@ -13,4 +13,10 @@ driver.find_element("id", "password").send_keys("Bilahari123#")
 time.sleep(2)
 driver.find_element("xpath", "/html/body/div[1]/div/form/center/input").click()
 time.sleep(2)
-print("User Logged In")
+curl = driver.current_url
+url = 'http://127.0.0.1:8000/'
+if curl == url:
+    print("Login successfull")
+else:
+    print("Test failed")
+driver.quit()

@@ -2,6 +2,7 @@ import razorpay
 from django.conf import settings
 import numpy as np
 import pytz
+from django.contrib.auth.hashers import check_password
 from django.utils import timezone
 import cv2
 from datetime import datetime, timedelta
@@ -769,3 +770,41 @@ def check_payment_expiry(request):
         return 'payment not expired'
 
     return 'no payments'
+
+def editprofile(request):
+    user = request.user
+    current_password_error = ''
+    if request.method == 'POST':
+        username = request.POST["username"]
+        email = request.POST["email"]
+        fname = request.POST["firstname"]
+        lname = request.POST["lastname"]
+        profile = request.FILES.get("profile")
+        cover = request.FILES.get('cover')
+
+        if profile is not None:
+            img = cv2.imdecode(np.fromstring(profile.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+            img = cv2.resize(img, (800, 800))
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            face_cascade = cv2.CascadeClassifier("network/haarcascade_frontalface_alt.xml")
+            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+            if len(faces) < 1:
+                return render(request, "network/editprofile.html", {
+                    "msg": "No faces detected. Upload a photo with a human face or try uploading a clear photo with "
+                           "better lighting."
+                })
+            elif len(faces) > 1:
+                return render(request, "network/editprofile.html", {
+                    "msg": "More than one face detecetd. (Upload a photo with only one person in it.)"
+                })
+            user = User.objects.create_user(username, email)
+            user.first_name = fname
+            user.last_name = lname
+            if profile is not None:
+                user.profile_pic = profile
+            else:
+                user.cover = cover
+                user.save()
+                return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, 'network/editprofile.html')

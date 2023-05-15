@@ -25,4 +25,10 @@ time.sleep(2)
 print("User Logged In")
 driver.find_element("xpath", "/html/body/div[2]/div[2]/div/div/div/div/div[1]/div[1]/div[2]/div[4]/div[1]").click()
 time.sleep(2)
-print("Post liked")
+curl = driver.current_url
+url = 'http://127.0.0.1:8000/'
+if curl == url:
+    print("Like successfull")
+else:
+    print("Test failed")
+driver.quit()

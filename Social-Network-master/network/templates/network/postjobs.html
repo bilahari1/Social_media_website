@@ -109,7 +109,7 @@
                                       </div>
                                       <div class="modal-body">
 
-                                          <form method="POST" action="jobposting">
+                                          <form method="POST" id="jobposting" action="jobposting">
                                                   {% csrf_token %}
                                                   <h5 class="modal-title">Title</h5>
                                                   <input type="text" name="title" class="form-control mb-3" required >
@@ -210,6 +210,77 @@
         </div>
 
     </div>
+<script>
+  function validateForm(event) {
+      const titleInput = document.getElementsByName("title")[0];
+      const locationInput = document.getElementsByName("location")[0];
+      const descriptionInput = document.getElementsByName("description")[0];
+      const qualificationsInput = document.getElementsByName("qualifications")[0];
+      const requirementsInput = document.getElementsByName("requirements")[0];
+      const responsibilitiesInput = document.getElementsByName("responsibilities")[0];
+      const websiteInput = document.getElementsByName("website")[0];
+      const salaryInput = document.getElementsByName("salary")[0];
 
+      const regex = /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{3,}$/;
+
+      if (!regex.test(titleInput.value)) {
+        titleInput.setCustomValidity("Title must contain at least 3 characters and only letters, numbers, and special characters !@#$%^&*()_+-=");
+      } else {
+        titleInput.setCustomValidity("");
+      }
+
+      if (!regex.test(locationInput.value)) {
+        locationInput.setCustomValidity("Location must contain at least 3 characters and only letters, numbers, and special characters !@#$%^&*()_+-=");
+      } else {
+        locationInput.setCustomValidity("");
+      }
+
+      if (!regex.test(descriptionInput.value)) {
+        descriptionInput.setCustomValidity("Description must contain at least 3 characters and only letters, numbers, and special characters !@#$%^&*()_+-=");
+      } else {
+        descriptionInput.setCustomValidity("");
+      }
+
+      if (!regex.test(qualificationsInput.value)) {
+        qualificationsInput.setCustomValidity("Qualifications must contain at least 3 characters and only letters, numbers, and special characters !@#$%^&*()_+-=");
+      } else {
+        qualificationsInput.setCustomValidity("");
+      }
+
+      if (!regex.test(requirementsInput.value)) {
+        requirementsInput.setCustomValidity("Requirements must contain at least 3 characters and only letters, numbers, and special characters !@#$%^&*()_+-=");
+      } else {
+        requirementsInput.setCustomValidity("");
+      }
+
+      if (!regex.test(responsibilitiesInput.value)) {
+        responsibilitiesInput.setCustomValidity("Responsibilities must contain at least 3 characters and only letters, numbers, and special characters !@#$%^&*()_+-=");
+      } else {
+        responsibilitiesInput.setCustomValidity("");
+      }
+
+      const websiteRegex = /^((http|https):\/\/)?[a-zA-Z0-9-\.]+\.[a-z]{2,}$/;
+
+      if (!websiteRegex.test(websiteInput.value)) {
+        websiteInput.setCustomValidity("Website must be a valid URL");
+      } else {
+        websiteInput.setCustomValidity("");
+      }
+
+      const salaryRegex = /^[0-9]+$/;
+
+      if (!salaryRegex.test(salaryInput.value)) {
+        salaryInput.setCustomValidity("Salary must be a valid number");
+      } else {
+        salaryInput.setCustomValidity("");
+      }
+
+      const form = document.getElementById("jobposting");
+      if (!form.checkValidity()) {
+        // Prevent form submission if any field is invalid
+        event.preventDefault();
+      }
+}
+</script>
 
 {% endblock %}
