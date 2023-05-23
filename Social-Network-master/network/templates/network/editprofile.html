@@ -65,6 +65,10 @@
 
             <center>
                 <input class="btn btn-primary" type="submit" value="Save Changes" style="margin-top: 10px; width: 95%;">
+                <a href="{% url 'profile' user.username %}">
+                    <input class="btn btn-danger" type="button" value="Cancel" style="margin-top: 10px; width: 95%;">
+                </a>
+
             </center>
         </form>
     </div>
@@ -83,7 +87,7 @@
         // Show currently uploaded cover picture
         var coverInput = document.getElementById('cover');
         var coverLabel = document.querySelector('label[for="cover"]');
-        var currentCoverPic = "{{ request.user.cover.url }}"; // Fetch the URL of the current cover picture from the database
+        var currentCoverPic = "{{ current_cover_url }}" || null;
         if (currentCoverPic) {
             coverLabel.textContent = currentCoverPic.split('/').pop();
         }

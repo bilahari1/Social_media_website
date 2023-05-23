@@ -749,10 +749,8 @@ def confirm_payment(request):
         subscription.has_active_payment = True
         subscription.save()
         if payment['status'] == 'authorized':
-            # Payment successful
             return JsonResponse({'status': 'success'})
         else:
-            # Payment failed
             return JsonResponse({'status': 'failure'})
 
 
@@ -771,9 +769,12 @@ def check_payment_expiry(request):
 
     return 'no payments'
 
+@never_cache
+@login_required(login_url="/")
 def editprofile(request):
     user = request.user
     current_password_error = ''
+    current_cover_url = user.cover.url if user.cover else None
     if request.method == 'POST':
         username = request.POST["username"]
         email = request.POST["email"]
@@ -795,16 +796,22 @@ def editprofile(request):
                 })
             elif len(faces) > 1:
                 return render(request, "network/editprofile.html", {
-                    "msg": "More than one face detecetd. (Upload a photo with only one person in it.)"
+                    "msg": "More than one face detected. Upload a photo with only one person in it."
                 })
-            user = User.objects.create_user(username, email)
-            user.first_name = fname
-            user.last_name = lname
-            if profile is not None:
-                user.profile_pic = profile
-            else:
-                user.cover = cover
-                user.save()
-                return HttpResponseRedirect(reverse("index"))
+
+        user.username = username
+        user.email = email
+        user.first_name = fname
+        user.last_name = lname
+
+        if profile is not None:
+            user.profile_pic = profile
+
+        if cover is not None:
+            user.cover = cover
+
+        user.save()
+        return redirect('profile', user.username)
+
     else:
-        return render(request, 'network/editprofile.html')
+        return render(request, 'network/editprofile.html', {'current_cover_url': current_cover_url})
