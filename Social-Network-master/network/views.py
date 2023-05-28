@@ -3,10 +3,11 @@ from django.conf import settings
 import numpy as np
 import pytz
 from django.contrib.auth.hashers import check_password
+from django.contrib import messages
 from django.utils import timezone
 import cv2
 from datetime import datetime, timedelta
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, login, logout, get_user_model, update_session_auth_hash
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
@@ -769,6 +770,7 @@ def check_payment_expiry(request):
 
     return 'no payments'
 
+
 @never_cache
 @login_required(login_url="/")
 def editprofile(request):
@@ -815,3 +817,29 @@ def editprofile(request):
 
     else:
         return render(request, 'network/editprofile.html', {'current_cover_url': current_cover_url})
+
+
+def cpass(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        user = request.user
+        if user.check_password(current_password):
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+
+                updated_user = authenticate(request, username=user.username, password=new_password)
+                if updated_user is not None:
+                    login(request, updated_user)
+
+                messages.success(request, 'Password changed successfully.')
+                return redirect('cpass')
+            else:
+                messages.error(request, 'New password and confirm password do not match.')
+        else:
+            messages.error(request, 'Current password is incorrect.')
+
+    return render(request, 'network/change_password.html')

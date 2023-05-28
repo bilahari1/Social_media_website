@@ -12,6 +12,9 @@
                     <a href="{% url 'editprofile' %}">
                         <button class="btn btn-outline-success float-right" id="edit-profile-btn">Edit Profile</button>
                     </a>
+                    <a href="{% url 'cpass' %}">
+                        <button class="btn btn-outline-success float-right" id="edit-profile-btn">Change Password</button>
+                    </a>
                 {% elif is_follower %}
                     <button class="btn btn-success float-right" onclick="unfollow_user(this,'{{username.username}}','edit_page')" id="following-btn">Following</button>
                 {% else %}
