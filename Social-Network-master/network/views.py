@@ -819,6 +819,8 @@ def editprofile(request):
         return render(request, 'network/editprofile.html', {'current_cover_url': current_cover_url})
 
 
+@never_cache
+@login_required(login_url="/")
 def cpass(request):
     if request.method == 'POST':
         current_password = request.POST.get('current_password')
@@ -845,6 +847,8 @@ def cpass(request):
     return render(request, 'network/change_password.html')
 
 
+@never_cache
+@login_required(login_url="/")
 def search_users(request):
     query = request.GET.get('query')
     if query:
