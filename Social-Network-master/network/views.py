@@ -843,3 +843,25 @@ def cpass(request):
             messages.error(request, 'Current password is incorrect.')
 
     return render(request, 'network/change_password.html')
+
+
+def search_users(request):
+    query = request.GET.get('query')
+    if query:
+        users = User.objects.filter(
+            username__icontains=query,
+            is_superuser=False
+        ) | User.objects.filter(
+            first_name__icontains=query,
+            is_superuser=False
+        ) | User.objects.filter(
+            last_name__icontains=query,
+            is_superuser=False
+        )
+    else:
+        users = []
+
+    return render(request, 'network/usersearch.html', {
+        'page': 'usersearch',
+        'users': users,
+    })

@@ -1,0 +1,128 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block title %} Jobs | Social Network {% endblock %}
+{% block head %}
+<style>
+  .search-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 10px;
+    width: 815px;
+    font-size: 16px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-input::placeholder {
+    color: #888;
+  }
+
+  .search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+
+  .users-list {
+    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+  }
+
+  .user-card {
+    display: flex;
+    align-items: center;
+    padding: 20px; /* Increased padding */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  .user-card img {
+    width: 60px; /* Increased image size */
+    height: 60px; /* Increased image size */
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .user-card .username {
+    font-weight: bold;
+    font-size: 20px; /* Increased font size */
+  }
+
+  .user-card .fullname {
+    font-size: 18px; /* Added font size for full name */
+  }
+
+  .user-link {
+    text-decoration: none;
+    color: black; /* Set the color to black */
+  }
+  .user-link:hover {
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="main-div">
+  <div class="left-div">
+    <nav class="head heading">
+      {% if page == 'all_posts' %}
+      <h3>All Posts</h3>
+      {% elif page == 'following' %}
+      <h3>Following</h3>
+      {% elif page == 'usersearch' %}
+      <h3>Search Users</h3>
+      {% elif page == 'saved' %}
+      <h3>Saved</h3>
+      {% elif page == 'profile' %}
+      <h3>Profile</h3>
+      {% else %}
+      <h3>Explore</h3>
+      {% endif %}
+    </nav>
+    <div class="left-div-content">
+      <div class="posts-view">
+        {% block profile %} {% endblock %}
+        <div class="main-div-content">
+          <form method="GET" action="{% url 'search_users' %}">
+            <input type="text" name="query" class="search-input" placeholder="Search..." required>
+            <button type="submit" class="search-button">Search</button>
+          </form>
+          {% if users %}
+            <div class="users-list">
+              {% for user in users %}
+              <a href="{% url 'profile' user.username %}" class="user-link"> <!-- Added user-link class -->
+                <div class="user-card">
+                  <img src="{{ user.profile_pic.url }}" alt="Profile Picture">
+                  <div>
+                    <div class="username">{{ user.first_name }} {{ user.last_name }}</div>
+                    <div class="fullname">@{{ user.username }}</div>
+                  </div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>No users found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+{% endblock %}
